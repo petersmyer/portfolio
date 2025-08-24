@@ -1,152 +1,472 @@
-<script>
-/* ---------- COURSE CONTENT (keeps the pizzazz) ---------- */
-function openFullCourse() {
-  const modal = document.getElementById('courseModal');
-  const frame = document.getElementById('courseFrame');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Peter Smyer — Instructional Design Showcase</title>
+  <style>
+    /* Reset and base styles */
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;line-height:1.6;color:#333;background:#f7fafc}
 
-  frame.innerHTML = `
-  <div style="background: linear-gradient(135deg,#ffeaa7 0%,#fab1a0 50%,#74b9ff 100%); min-height: 100%; padding: 28px;">
-    <div style="background:#fff; border-radius:20px; border:4px solid #2d3436; box-shadow:0 20px 40px rgba(0,0,0,.1); max-width:820px; margin:0 auto; overflow:hidden">
-      <div id="progressBar" style="height:6px; background:linear-gradient(90deg,#00b894,#00cec9); width:8%; transition:width .3s;"></div>
-      <div style="padding:36px 28px; text-align:center">
-        <h1 style="font-size:2.25rem; margin:0 0 10px; color:#2d3436; text-shadow:2px 2px 0 #fdcb6e; font-weight:800">🥣 Breakfast Basics</h1>
-        <div style="font-size:3rem; margin:10px 0; animation:bounce 2s infinite">🥛🥄🌾</div>
-        <p style="max-width:620px; margin:0 auto 18px; color:#636e72">
-          Learn the ancient art of cereal prep in a few delightful steps.
-        </p>
+    /* Layout */
+    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+    .grid{display:grid;gap:2rem}
+    .flex{display:flex}
+    .inline-flex{display:inline-flex}
+    .inline-block{display:inline-block}
+    @media(min-width:768px){
+      .md-grid-2{grid-template-columns:repeat(2,1fr)}
+      .md-grid-3{grid-template-columns:repeat(3,1fr)}
+    }
 
-        <div id="courseStep"></div>
+    /* Typography */
+    .text-center{text-align:center}
+    .text-6xl{font-size:3.75rem;line-height:1}
+    .text-5xl{font-size:3rem;line-height:1.1;font-weight:700}
+    .text-4xl{font-size:2.25rem;line-height:1.2;font-weight:700}
+    .text-3xl{font-size:1.875rem;line-height:1.3;font-weight:700}
+    .text-2xl{font-size:1.5rem;line-height:1.4;font-weight:600}
+    .text-xl{font-size:1.25rem;line-height:1.5}
+    .text-lg{font-size:1.125rem;line-height:1.6}
 
-        <div style="margin-top:18px; display:flex; justify-content:center; gap:12px">
-          <button id="prevBtn" class="cartoon-button" style="background:#fff; padding:12px 20px">⬅️ Back</button>
-          <button id="nextBtn" class="cartoon-button bg-blue-600 text-white" style="padding:12px 20px">Next ➡️</button>
+    /* Colors */
+    .text-white{color:#fff}
+    .text-gray-800{color:#2d3748}
+    .text-gray-700{color:#4a5568}
+    .text-gray-600{color:#718096}
+    .text-gray-400{color:#a0aec0}
+    .text-gray-300{color:#e2e8f0}
+    .text-blue-600{color:#3182ce}
+    .text-green-600{color:#38a169}
+    .text-indigo-600{color:#5a67d8}
+
+    .bg-white{background:#fff}
+    .bg-gray-50{background:#f7fafc}
+    .bg-gray-100{background:#f7fafc}
+    .bg-gray-700{background:#4a5568}
+    .bg-gray-800{background:#2d3748}
+    .bg-blue-600{background:#3182ce}
+    .bg-green-600{background:#38a169}
+    .bg-indigo-600{background:#5a67d8}
+
+    /* Spacing */
+    .py-20{padding:5rem 0}
+    .py-16{padding:4rem 0}
+    .py-12{padding:3rem 0}
+    .p-12{padding:3rem}
+    .p-8{padding:2rem}
+    .p-6{padding:1.5rem}
+    .px-6{padding:0 1.5rem}
+    .px-8{padding:0 2rem}
+    .px-3{padding:0 .75rem}
+    .py-3{padding:.75rem 0}
+    .py-4{padding:1rem 0}
+    .py-1{padding:.25rem 0}
+    .mb-2{margin-bottom:.5rem}
+    .mb-4{margin-bottom:1rem}
+    .mb-6{margin-bottom:1.5rem}
+    .mb-8{margin-bottom:2rem}
+    .mb-12{margin-bottom:3rem}
+    .mx-auto{margin:0 auto}
+    .mt-8{margin-top:2rem}
+    .pt-8{padding-top:2rem}
+
+    /* Utilities */
+    .items-center{align-items:center}
+    .items-start{align-items:flex-start}
+    .gap-6{gap:1.5rem}
+    .gap-3{gap:.75rem}
+    .w-full{width:100%}
+    .w-24{width:6rem}
+    .h-1{height:.25rem}
+    .leading-relaxed{line-height:1.625}
+    .rounded-xl{border-radius:.75rem}
+    .rounded-lg{border-radius:.5rem}
+    .rounded-full{border-radius:9999px}
+    .border-t{border-top:1px solid #718096}
+
+    /* On-brand visual flourishes */
+    .cereal-gradient{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)}
+    .blue-gradient{background:linear-gradient(135deg,#ebf8ff 0%,#e6fffa 100%)}
+    .green-gradient{background:linear-gradient(135deg,#f0fff4 0%,#d6f5d6 100%)}
+
+    .hover-lift{transition:transform .3s ease,box-shadow .3s ease}
+    .hover-lift:hover{transform:translateY(-8px) rotate(-1deg);box-shadow:0 20px 40px rgba(0,0,0,.15)}
+
+    .cartoon-button{border:3px solid #2c3e50;box-shadow:4px 4px 0 #2c3e50;transition:all .2s ease;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+    .cartoon-button:hover{transform:translateY(-2px);box-shadow:6px 6px 0 #2c3e50}
+    .cartoon-button:active{transform:translateY(2px);box-shadow:2px 2px 0 #2c3e50}
+
+    .floating-element{animation:float 3s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    .skill-tag{background:#e2e8f0;color:#2d3748;padding:.25rem .75rem;border-radius:9999px;font-size:.875rem;display:inline-block;margin:.25rem}
+    .skill-tag.blue{background:#ebf8ff;color:#2c5282}
+    .skill-tag.green{background:#f0fff4;color:#276749}
+    .skill-tag.purple{background:#faf5ff;color:#553c9a}
+    .skill-tag.yellow{background:#fffff0;color:#975a16}
+
+    .bullet-blue,.bullet-green,.bullet-purple{width:.5rem;height:.5rem;border-radius:50%}
+    .bullet-blue{background:#4299e1}
+    .bullet-green{background:#48bb78}
+    .bullet-purple{background:#9f7aea}
+    .skill-list li{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+
+    .backdrop-blur{background:rgba(255,255,255,.2);backdrop-filter:blur(4px)}
+
+    /* Modal */
+    .course-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999999;overflow-y:auto}
+    .course-modal.active{display:flex;align-items:center;justify-content:center;padding:20px}
+    .course-content{background:#fff;border-radius:20px;width:100%;max-width:900px;max-height:90vh;overflow-y:auto;position:relative}
+    .close-course{position:absolute;top:15px;right:20px;background:#e74c3c;color:#fff;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:20px;z-index:1000000;transition:all .2s ease}
+    .close-course:hover{background:#c0392b;transform:scale(1.1)}
+
+    @media(max-width:768px){
+      .text-6xl{font-size:3rem}
+      .text-5xl{font-size:2.5rem}
+      .text-4xl{font-size:2rem}
+      .py-20{padding:3rem 0}
+      .py-16{padding:2.5rem 0}
+      .p-12{padding:2rem}
+      .p-8{padding:1.5rem}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="cereal-gradient text-white py-20">
+    <div class="container text-center">
+      <div class="mb-6">
+        <div class="text-6xl mb-4 floating-element">🎨</div>
+        <h1 class="text-5xl mb-4">Peter Smyer</h1>
+        <h2 class="text-2xl font-light mb-6">Instructional Design Showcase</h2>
+      </div>
+      <div class="backdrop-blur rounded-lg p-6 inline-block">
+        <p class="text-xl font-medium">Instructional Designer • Learning Experience Creator • Educational Problem Solver</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Me -->
+  <section class="py-16 bg-white">
+    <div class="container max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">About Me</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-8 hover-lift">
+        <div class="flex items-start gap-6">
+          <div class="text-4xl floating-element">👨‍💻</div>
+          <div>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+              With over 6 years of experience in Learning & Development, I specialize in creating engaging, effective instructional experiences that truly connect with learners and drive meaningful results.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+              My expertise spans multimedia production, adult learning theories, and transforming complex concepts into clear, actionable learning experiences. Whether it's eLearning modules, job aids, or comprehensive training programs, I bring creativity and pedagogical expertise to every project.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+              When I'm not designing learning experiences, you'll find me staying current with educational technology trends and exploring innovative ways to make learning more engaging and effective.
+            </p>
+          </div>
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- Credentials & Skills -->
+  <section class="py-16 bg-gray-100">
+    <div class="container max-w-6xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">Credentials & Skills</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+        <p class="text-xl text-gray-600">Tools and expertise that power amazing learning experiences</p>
+      </div>
+
+      <div class="grid md-grid-3">
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4 floating-element">🛠️</div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Technical Tools</h3>
+          <ul class="skill-list">
+            <li><span class="bullet-blue"></span>Articulate 360</li>
+            <li><span class="bullet-blue"></span>Canva</li>
+            <li><span class="bullet-blue"></span>Adobe Suite</li>
+            <li><span class="bullet-blue"></span>LearnUpon</li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4 floating-element" style="animation-delay:-.5s">📚</div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Design Methodologies</h3>
+          <ul class="skill-list">
+            <li><span class="bullet-green"></span>ADDIE Model</li>
+            <li><span class="bullet-green"></span>Adult Learning Theories</li>
+            <li><span class="bullet-green"></span>Bloom's Taxonomy</li>
+            <li><span class="bullet-green"></span>Kirkpatrick Model</li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4 floating-element" style="animation-delay:-1s">📊</div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Analysis & Strategy</h3>
+          <ul class="skill-list">
+            <li><span class="bullet-purple"></span>Data Analysis</li>
+            <li><span class="bullet-purple"></span>Needs Assessment</li>
+            <li><span class="bullet-purple"></span>Learning Objectives</li>
+            <li><span class="bullet-purple"></span>Performance Metrics</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Projects -->
+  <section class="py-16 bg-white">
+    <div class="container max-w-6xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">Portfolio Projects</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+        <p class="text-xl text-gray-600">Featured work that demonstrates my approach to instructional design</p>
+      </div>
+
+      <div class="grid md-grid-2">
+        <!-- Project 1 -->
+        <div class="blue-gradient rounded-xl p-8 hover-lift">
+          <div class="text-5xl mb-6 text-center floating-element">🥣</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Interactive eCourse</h3>
+          <h4 class="text-xl font-semibold text-blue-600 mb-4">"How to Make a Bowl of Cereal"</h4>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            A comprehensive, interactive learning experience that breaks down the seemingly simple task of cereal preparation into engaging, bite-sized modules. Features branching scenarios, knowledge checks, and multimedia elements.
+          </p>
+          <button id="launchCourse" class="cartoon-button bg-blue-600 text-white py-3 px-6 rounded-lg w-full">Launch Course 🚀</button>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="green-gradient rounded-xl p-8 hover-lift">
+          <div class="text-5xl mb-6 text-center floating-element" style="animation-delay:-.5s">📋</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Job Aid</h3>
+          <h4 class="text-xl font-semibold text-green-600 mb-4">"Quick Guide: How to Make a Bowl of Cereal"</h4>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            A concise, visually appealing reference guide designed for just-in-time learning. Perfect for new breakfast enthusiasts or anyone needing a quick refresher on proper cereal preparation techniques.
+          </p>
+          <button id="jobAidBtn" class="cartoon-button bg-green-600 text-white py-3 px-6 rounded-lg w-full">Download PDF 📄</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resume Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container max-w-4xl text-center">
+      <div class="bg-white rounded-xl p-12 hover-lift">
+        <div class="text-6xl mb-6 floating-element">📄</div>
+        <h2 class="text-3xl text-gray-800 mb-4">Ready to Learn More?</h2>
+        <p class="text-xl text-gray-600 mb-8">Download my full resume to see the complete picture of my experience, education, and achievements in instructional design.</p>
+        <a class="cartoon-button bg-indigo-600 text-white py-4 px-8 rounded-lg text-lg inline-flex items-center gap-2" href="resume.pdf" download>
+          <span>Download My Resume</span><span>⬇️</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container max-w-4xl">
+      <div class="text-center mb-8">
+        <h3 class="text-2xl font-bold mb-4">Let's Connect!</h3>
+        <p class="text-gray-300 mb-6">Ready to discuss your next learning project? I'm always up for a good conversation about instructional design and educational innovation.</p>
+      </div>
+
+      <div class="grid md-grid-3">
+        <div class="bg-gray-700 rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2 floating-element">📧</div>
+          <h4 class="font-semibold mb-2">Email</h4>
+          <p class="text-gray-300">peter.smyer@email.com</p>
+        </div>
+
+        <div class="bg-gray-700 rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2 floating-element" style="animation-delay:-.5s">📱</div>
+          <h4 class="font-semibold mb-2">Phone</h4>
+          <p class="text-gray-300">480-570-3459</p>
+        </div>
+
+        <div class="bg-gray-700 rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2 floating-element" style="animation-delay:-1s">💼</div>
+          <h4 class="font-semibold mb-2">LinkedIn</h4>
+          <p class="text-gray-300">linkedin.com/in/petersmyer</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-8 pt-8 border-t">
+        <p class="text-gray-400">© 2024 Peter Smyer. All rights reserved. Designed with passion for learning!</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Course Modal -->
+  <div class="course-modal" id="courseModal" aria-hidden="true">
+    <div class="course-content" role="dialog" aria-modal="true" aria-labelledby="courseTitle">
+      <button class="close-course" id="closeCourse" aria-label="Close course">×</button>
+      <div id="courseFrame"></div>
+    </div>
   </div>
-  <style>
-    @keyframes bounce {0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-8px)}}
-  </style>`;
 
-  // Mini-flow with progress
-  const progress = document.getElementById('progressBar');
-  const stepEl = document.getElementById('courseStep');
-  const prev = document.getElementById('prevBtn');
-  const next = document.getElementById('nextBtn');
-  let i = 0;
-  const state = { cereal: '', milk: '', order: '' };
-
-  const screens = [
-    () => `
-      <h2 class="text-2xl" style="margin:12px 0 8px">Step 1 — Pick a cereal</h2>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; max-width:620px; margin:0 auto">
-        ${opt("state.cereal='Flakes'","✨ Flakes")}
-        ${opt("state.cereal='Cocoa'","🍫 Cocoa")}
-        ${opt("state.cereal='Oats'","🌾 Oats")}
-        ${opt("state.cereal='Corn'","🌽 Corn")}
+  <script>
+    // ---------- COURSE ----------
+    function buildCourseHTML() {
+      return `
+      <div style="background:linear-gradient(135deg,#ffeaa7 0%,#fab1a0 50%,#74b9ff 100%);min-height:100%;padding:28px">
+        <div style="background:#fff;border-radius:20px;border:4px solid #2d3436;box-shadow:0 20px 40px rgba(0,0,0,.1);max-width:820px;margin:0 auto;overflow:hidden">
+          <div id="progressBar" style="height:6px;background:linear-gradient(90deg,#00b894,#00cec9);width:8%;transition:width .3s"></div>
+          <div style="padding:36px 28px;text-align:center">
+            <h1 id="courseTitle" style="font-size:2.25rem;margin:0 0 10px;color:#2d3436;text-shadow:2px 2px 0 #fdcb6e;font-weight:800">🥣 Breakfast Basics</h1>
+            <div style="font-size:3rem;margin:10px 0;animation:bounce 2s infinite">🥛🥄🌾</div>
+            <p style="max-width:620px;margin:0 auto 18px;color:#636e72">Learn the ancient art of cereal prep in a few delightful steps.</p>
+            <div id="courseStep"></div>
+            <div style="margin-top:18px;display:flex;justify-content:center;gap:12px">
+              <button id="prevBtn" class="cartoon-button" style="background:#fff;padding:12px 20px">⬅️ Back</button>
+              <button id="nextBtn" class="cartoon-button bg-blue-600 text-white" style="padding:12px 20px">Next ➡️</button>
+            </div>
+          </div>
+        </div>
       </div>
-      ${helper('Choose your crunch vehicle.')}
-    `,
-    () => `
-      <h2 class="text-2xl" style="margin:12px 0 8px">Step 2 — Pick a milk</h2>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; max-width:620px; margin:0 auto">
-        ${opt("state.milk='Whole'","🥛 Whole")}
-        ${opt("state.milk='2%'","🥛 2%")}
-        ${opt("state.milk='Almond'","🌰 Almond")}
-        ${opt("state.milk='Oat'","🌾 Oat")}
-      </div>
-      ${helper('Yes, chocolate milk is a personality.')}
-    `,
-    () => `
-      <h2 class="text-2xl" style="margin:12px 0 8px">Step 3 — The eternal question</h2>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; max-width:620px; margin:0 auto">
-        ${opt("state.order='cereal'","🥣 → 🥛  (ratio control)")}
-        ${opt("state.order='milk'","🥛 → 🥣  (level control)")}
-      </div>
-      ${helper('There is no wrong answer. Only judgment.')}
-    `,
-    () => `
-      <h2 class="text-2xl" style="margin:12px 0 8px">You did it! 🎉</h2>
-      <p style="margin:6px 0 12px">Cereal: <b>${state.cereal||'—'}</b> • Milk: <b>${state.milk||'—'}</b> • Order: <b>${state.order ? (state.order==='milk'?'Milk → Cereal':'Cereal → Milk') : '—'}</b></p>
-      <p style="margin-bottom:14px"><i>${state.order==='milk'?'You’re a Splash‑Tactician.':'You’re a Ratio‑Regulator.'}</i></p>
-      <a id="dlAid" class="cartoon-button bg-green-600 text-white" style="padding:10px 18px; display:inline-block">Download Job Aid 📄</a>
-      <a href="resume.pdf" download class="cartoon-button bg-indigo-600 text-white" style="padding:10px 18px; display:inline-block; margin-left:8px">Resume ⬇️</a>
-    `
-  ];
-
-  function opt(js, label) {
-    return `<button class="cartoon-button" style="background:#fff; padding:10px" onclick="${js}; this.classList.add('selected')">${label}</button>`;
-  }
-  function helper(text) {
-    return `<div style="opacity:.7; margin-top:8px">${text}</div>`;
-  }
-  function render() {
-    stepEl.innerHTML = screens[i]();
-    progress.style.width = ((i+1)/screens.length*100) + '%';
-    prev.style.visibility = i ? 'visible' : 'hidden';
-    if (i === screens.length - 1) {
-      const dl = document.getElementById('dlAid');
-      if (dl) dl.addEventListener('click', (e)=>{ e.preventDefault(); downloadJobAid(state); });
-      next.textContent = 'Restart ↻';
-    } else {
-      next.textContent = 'Next ➡️';
+      <style>
+        @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-8px)}}
+        .pick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;max-width:620px;margin:0 auto}
+        .pick-grid .cartoon-button{background:#fff;padding:10px}
+      </style>`;
     }
-  }
-  prev.onclick = () => { if (i>0) { i--; render(); } };
-  next.onclick = () => {
-    if (i===0 && !state.cereal) return nudge('Pick a cereal 🙂');
-    if (i===1 && !state.milk) return nudge('Pick your milk 🥛');
-    if (i===2 && !state.order) return nudge('Choose your side!');
-    i = (i >= screens.length-1) ? 0 : i+1;
-    render();
-  };
-  function nudge(msg){
-    const m = document.createElement('div');
-    m.textContent = msg;
-    m.style.cssText = 'margin-top:8px;color:#2d3436;background:#ffeaa7;border:2px solid #2d3436;display:inline-block;padding:6px 10px;border-radius:10px';
-    stepEl.appendChild(m);
-    setTimeout(()=>m.remove(), 1300);
-  }
-  render();
-  modal.classList.add('active');
-}
 
-/* ---------- JOB AID (styled, printable) ---------- */
-function downloadJobAid(state = {cereal:'', milk:'', order:''}) {
-  const ordText = state.order ? (state.order==='milk' ? 'Milk → Cereal (Splash‑Tactician)' : 'Cereal → Milk (Ratio‑Regulator)') : '—';
-  const html = `<!doctype html><meta charset="utf-8"><title>Quick Guide: Cereal</title>
-  <style>
-    body{font-family:Arial,system-ui,sans-serif;max-width:720px;margin:24px auto;line-height:1.55}
-    h1{margin:0 0 12px}
-    .b{border:2px solid #222; border-radius:10px; padding:12px; margin:10px 0}
-    .n{display:inline-block;width:26px;height:26px; border-radius:50%; background:#222;color:#fff;text-align:center; line-height:26px; font-weight:800; margin-right:6px}
-    @media print {.no{display:none}}
-  </style>
-  <h1>Quick Guide: Bowl of Cereal</h1>
-  <div class="b"><b>Cereal:</b> ${state.cereal||'—'} &nbsp; <b>Milk:</b> ${state.milk||'—'} &nbsp; <b>Order:</b> ${ordText}</div>
-  <p><span class="n">1</span>Gather bowl + spoon</p>
-  <p><span class="n">2</span>${state.order==='milk'?'Pour milk first to your level':'Add cereal first for ratio control'}</p>
-  <p><span class="n">3</span>${state.order==='milk'?'Add cereal slowly to desired crunch':'Add milk slowly around edges'}</p>
-  <p><span class="n">4</span>Optional toppings: fruit, nuts, honey</p>
-  <p><span class="n">5</span>Enjoy immediately (cold milk = longer crunch)</p>
-  <p class="no"><i>Tip: Save or print this page.</i></p>`;
-  const blob = new Blob([html], {type:'text/html'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'cereal-job-aid.html'; a.click();
-  setTimeout(()=>URL.revokeObjectURL(url), 600);
-}
+    function openCourse() {
+      const modal = document.getElementById('courseModal');
+      const frame = document.getElementById('courseFrame');
+      frame.innerHTML = buildCourseHTML();
 
-/* ---------- WIRE UP (no inline handlers) ---------- */
-document.addEventListener('DOMContentLoaded', function () {
-  const launch = document.getElementById('launchCourse');
-  const jobAid = document.getElementById('jobAidBtn');
-  const closeBtn = document.getElementById('closeCourse');
-  const modal = document.getElementById('courseModal');
+      const progress = document.getElementById('progressBar');
+      const stepEl   = document.getElementById('courseStep');
+      const prev     = document.getElementById('prevBtn');
+      const next     = document.getElementById('nextBtn');
 
-  if (launch) launch.addEventListener('click', openFullCourse);
-  if (jobAid) jobAid.addEventListener('click', (e)=>{ e.preventDefault(); downloadJobAid(); });
-  if (closeBtn) closeBtn.addEventListener('click', ()=> modal.classList.remove('active'));
-  if (modal) modal.addEventListener('click', (e)=>{ if (e.target === modal) modal.classList.remove('active'); });
-});
-</script>
+      let i = 0;
+      const state = { cereal:'', milk:'', order:'' };
+
+      const screens = [
+        () => `
+          <h2 class="text-2xl" style="margin:12px 0 8px">Step 1 — Pick a cereal</h2>
+          <div class="pick-grid">
+            ${opt("state.cereal='Flakes'","✨ Flakes")}
+            ${opt("state.cereal='Cocoa'","🍫 Cocoa")}
+            ${opt("state.cereal='Oats'","🌾 Oats")}
+            ${opt("state.cereal='Corn'","🌽 Corn")}
+          </div>
+          ${help('Choose your crunch vehicle.')}
+        `,
+        () => `
+          <h2 class="text-2xl" style="margin:12px 0 8px">Step 2 — Pick a milk</h2>
+          <div class="pick-grid">
+            ${opt("state.milk='Whole'","🥛 Whole")}
+            ${opt("state.milk='2%'","🥛 2%")}
+            ${opt("state.milk='Almond'","🌰 Almond")}
+            ${opt("state.milk='Oat'","🌾 Oat")}
+          </div>
+          ${help('Yes, chocolate milk is a personality.')}
+        `,
+        () => `
+          <h2 class="text-2xl" style="margin:12px 0 8px">Step 3 — The eternal question</h2>
+          <div class="pick-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+            ${opt("state.order='cereal'","🥣 → 🥛  (ratio control)")}
+            ${opt("state.order='milk'","🥛 → 🥣  (level control)")}
+          </div>
+          ${help('There is no wrong answer. Only judgment.')}
+        `,
+        () => `
+          <h2 class="text-2xl" style="margin:12px 0 8px">You did it! 🎉</h2>
+          <p style="margin:6px 0 12px">Cereal: <b>${state.cereal||'—'}</b> • Milk: <b>${state.milk||'—'}</b> • Order: <b>${state.order ? (state.order==='milk'?'Milk → Cereal':'Cereal → Milk') : '—'}</b></p>
+          <p style="margin-bottom:14px"><i>${state.order==='milk'?'You’re a Splash‑Tactician.':'You’re a Ratio‑Regulator.'}</i></p>
+          <a id="dlAid" class="cartoon-button bg-green-600 text-white" style="padding:10px 18px;display:inline-block">Download Job Aid 📄</a>
+          <a href="resume.pdf" download class="cartoon-button bg-indigo-600 text-white" style="padding:10px 18px;display:inline-block;margin-left:8px">Resume ⬇️</a>
+        `
+      ];
+
+      function opt(js, label){ return `<button class="cartoon-button" onclick="${js}; this.blur()">${label}</button>`; }
+      function help(t){ return `<div style="opacity:.7;margin-top:8px">${t}</div>`; }
+      function nudge(msg){
+        const m = document.createElement('div');
+        m.textContent = msg;
+        m.style.cssText = 'margin-top:8px;color:#2d3436;background:#ffeaa7;border:2px solid #2d3436;display:inline-block;padding:6px 10px;border-radius:10px';
+        stepEl.appendChild(m); setTimeout(()=>m.remove(),1300);
+      }
+      function render(){
+        stepEl.innerHTML = screens[i]();
+        progress.style.width = ((i+1)/screens.length*100)+'%';
+        prev.style.visibility = i ? 'visible' : 'hidden';
+        next.textContent = (i===screens.length-1) ? 'Restart ↻' : 'Next ➡️';
+        const dl = document.getElementById('dlAid');
+        if (dl) dl.addEventListener('click', e => { e.preventDefault(); downloadJobAid(state); });
+      }
+
+      prev.onclick = () => { if (i>0){ i--; render(); } };
+      next.onclick = () => {
+        if (i===0 && !state.cereal) return nudge('Pick a cereal 🙂');
+        if (i===1 && !state.milk)   return nudge('Pick your milk 🥛');
+        if (i===2 && !state.order)  return nudge('Choose your side!');
+        i = (i>=screens.length-1) ? 0 : i+1; render();
+      };
+
+      render();
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden','false');
+
+      // ESC to close
+      document.addEventListener('keydown', escCloseOnce);
+      function escCloseOnce(e){ if(e.key==='Escape'){ closeCourse(); document.removeEventListener('keydown', escCloseOnce);} }
+    }
+
+    function closeCourse(){
+      const modal = document.getElementById('courseModal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden','true');
+      document.getElementById('courseFrame').innerHTML = '';
+    }
+
+    // ---------- JOB AID ----------
+    function downloadJobAid(state = {cereal:'', milk:'', order:''}){
+      const ordText = state.order ? (state.order==='milk' ? 'Milk → Cereal (Splash‑Tactician)' : 'Cereal → Milk (Ratio‑Regulator)') : '—';
+      const html = `<!doctype html><meta charset="utf-8"><title>Quick Guide: Cereal</title>
+      <style>
+        body{font-family:Arial,system-ui,sans-serif;max-width:720px;margin:24px auto;line-height:1.55}
+        h1{margin:0 0 12px}
+        .b{border:2px solid #222;border-radius:10px;padding:12px;margin:10px 0}
+        .n{display:inline-block;width:26px;height:26px;border-radius:50%;background:#222;color:#fff;text-align:center;line-height:26px;font-weight:800;margin-right:6px}
+        @media print{.no{display:none}}
+      </style>
+      <h1>Quick Guide: Bowl of Cereal</h1>
+      <div class="b"><b>Cereal:</b> ${state.cereal||'—'} &nbsp; <b>Milk:</b> ${state.milk||'—'} &nbsp; <b>Order:</b> ${ordText}</div>
+      <p><span class="n">1</span>Gather bowl + spoon</p>
+      <p><span class="n">2</span>${state.order==='milk'?'Pour milk first to your level':'Add cereal first for ratio control'}</p>
+      <p><span class="n">3</span>${state.order==='milk'?'Add cereal slowly to desired crunch':'Add milk slowly around edges'}</p>
+      <p><span class="n">4</span>Optional toppings: fruit, nuts, honey</p>
+      <p><span class="n">5</span>Enjoy immediately (cold milk = longer crunch)</p>
+      <p class="no"><i>Tip: Save or print this page.</i></p>`;
+      const blob = new Blob([html],{type:'text/html'});
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'cereal-job-aid.html'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),600);
+    }
+
+    // ---------- WIRE UP ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      const launch = document.getElementById('launchCourse');
+      const jobAid = document.getElementById('jobAidBtn');
+      const closeBtn = document.getElementById('closeCourse');
+      const modal = document.getElementById('courseModal');
+
+      if (launch) launch.addEventListener('click', openCourse);
+      if (jobAid) jobAid.addEventListener('click', e => { e.preventDefault(); downloadJobAid(); });
+      if (closeBtn) closeBtn.addEventListener('click', closeCourse);
+      if (modal) modal.addEventListener('click', e => { if (e.target === modal) closeCourse(); });
+    });
+  </script>
+</body>
+</html>
