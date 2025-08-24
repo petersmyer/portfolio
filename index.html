@@ -1,138 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Peter Smyer — Instructional Design Showcase</title>
-  <style>
-    /* (keep all your CSS here unchanged) */
-  </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="cereal-gradient text-white py-20">
-    <div class="container text-center">
-      <div class="mb-6">
-        <div class="text-6xl mb-4 floating-element">🎨</div>
-        <h1 class="text-5xl mb-4">Peter Smyer</h1>
-        <h2 class="text-2xl font-light mb-6">Instructional Design Showcase</h2>
-      </div>
-      <div class="backdrop-blur rounded-lg p-6 inline-block">
-        <p class="text-xl font-medium">
-          Instructional Designer • Learning Experience Creator • Educational Problem Solver
+<script>
+/* ---------- COURSE CONTENT (keeps the pizzazz) ---------- */
+function openFullCourse() {
+  const modal = document.getElementById('courseModal');
+  const frame = document.getElementById('courseFrame');
+
+  frame.innerHTML = `
+  <div style="background: linear-gradient(135deg,#ffeaa7 0%,#fab1a0 50%,#74b9ff 100%); min-height: 100%; padding: 28px;">
+    <div style="background:#fff; border-radius:20px; border:4px solid #2d3436; box-shadow:0 20px 40px rgba(0,0,0,.1); max-width:820px; margin:0 auto; overflow:hidden">
+      <div id="progressBar" style="height:6px; background:linear-gradient(90deg,#00b894,#00cec9); width:8%; transition:width .3s;"></div>
+      <div style="padding:36px 28px; text-align:center">
+        <h1 style="font-size:2.25rem; margin:0 0 10px; color:#2d3436; text-shadow:2px 2px 0 #fdcb6e; font-weight:800">🥣 Breakfast Basics</h1>
+        <div style="font-size:3rem; margin:10px 0; animation:bounce 2s infinite">🥛🥄🌾</div>
+        <p style="max-width:620px; margin:0 auto 18px; color:#636e72">
+          Learn the ancient art of cereal prep in a few delightful steps.
         </p>
-      </div>
-    </div>
-  </header>
 
-  <!-- About Me, Credentials & Skills sections here (unchanged) -->
+        <div id="courseStep"></div>
 
-  <!-- Portfolio Projects -->
-  <section class="py-16 bg-white">
-    <div class="container max-w-6xl">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl text-gray-800 mb-4">Portfolio Projects</h2>
-        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
-        <p class="text-xl text-gray-600">Featured work that demonstrates my approach to instructional design</p>
-      </div>
-
-      <div class="grid md-grid-2">
-        <!-- Project 1 -->
-        <div class="blue-gradient rounded-xl p-8 hover-lift">
-          <div class="text-5xl mb-6 text-center floating-element">🥣</div>
-          <h3 class="text-2xl font-bold text-gray-800 mb-4">Interactive eCourse</h3>
-          <h4 class="text-xl font-semibold text-blue-600 mb-4">"How to Make a Bowl of Cereal"</h4>
-          <p class="text-gray-700 mb-6 leading-relaxed">
-            A comprehensive, interactive learning experience...
-          </p>
-          <button id="launchCourse" class="cartoon-button bg-blue-600 text-white py-3 px-6 rounded-lg w-full">
-            Launch Course 🚀
-          </button>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="green-gradient rounded-xl p-8 hover-lift">
-          <div class="text-5xl mb-6 text-center floating-element">📋</div>
-          <h3 class="text-2xl font-bold text-gray-800 mb-4">Job Aid</h3>
-          <h4 class="text-xl font-semibold text-green-600 mb-4">"Quick Guide: How to Make a Bowl of Cereal"</h4>
-          <p class="text-gray-700 mb-6 leading-relaxed">
-            A concise, visually appealing reference guide...
-          </p>
-          <button id="jobAidBtn" class="cartoon-button bg-green-600 text-white py-3 px-6 rounded-lg w-full">
-            Download PDF 📄
-          </button>
+        <div style="margin-top:18px; display:flex; justify-content:center; gap:12px">
+          <button id="prevBtn" class="cartoon-button" style="background:#fff; padding:12px 20px">⬅️ Back</button>
+          <button id="nextBtn" class="cartoon-button bg-blue-600 text-white" style="padding:12px 20px">Next ➡️</button>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Resume Section -->
-  <section class="py-16 bg-gray-100">
-    <div class="container max-w-4xl text-center">
-      <div class="bg-white rounded-xl p-12 hover-lift">
-        <div class="text-6xl mb-6 floating-element">📄</div>
-        <h2 class="text-3xl text-gray-800 mb-4">Ready to Learn More?</h2>
-        <p class="text-xl text-gray-600 mb-8">Download my full resume...</p>
-        <a class="cartoon-button bg-indigo-600 text-white py-4 px-8 rounded-lg text-lg inline-flex items-center gap-2"
-           href="resume.pdf" download>
-          <span>Download My Resume</span><span>⬇️</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer here (unchanged) -->
-
-  <!-- Course Modal -->
-  <div class="course-modal" id="courseModal">
-    <div class="course-content">
-      <button class="close-course" id="closeCourse">×</button>
-      <div id="courseFrame"></div>
     </div>
   </div>
+  <style>
+    @keyframes bounce {0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-8px)}}
+  </style>`;
 
-  <script>
-    // Demo course builder
-    function openFullCourse() {
-      const modal = document.getElementById('courseModal');
-      const frame = document.getElementById('courseFrame');
-      frame.innerHTML = `
-        <div style="padding:40px;text-align:center">
-          <h2>🥣 Breakfast Basics</h2>
-          <p>Welcome! Here you’ll learn the eternal question: cereal first or milk first?</p>
-          <button onclick="alert('You chose cereal first!')">Cereal → Milk</button>
-          <button onclick="alert('You chose milk first!')">Milk → Cereal</button>
-        </div>`;
-      modal.classList.add('active');
+  // Mini-flow with progress
+  const progress = document.getElementById('progressBar');
+  const stepEl = document.getElementById('courseStep');
+  const prev = document.getElementById('prevBtn');
+  const next = document.getElementById('nextBtn');
+  let i = 0;
+  const state = { cereal: '', milk: '', order: '' };
+
+  const screens = [
+    () => `
+      <h2 class="text-2xl" style="margin:12px 0 8px">Step 1 — Pick a cereal</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; max-width:620px; margin:0 auto">
+        ${opt("state.cereal='Flakes'","✨ Flakes")}
+        ${opt("state.cereal='Cocoa'","🍫 Cocoa")}
+        ${opt("state.cereal='Oats'","🌾 Oats")}
+        ${opt("state.cereal='Corn'","🌽 Corn")}
+      </div>
+      ${helper('Choose your crunch vehicle.')}
+    `,
+    () => `
+      <h2 class="text-2xl" style="margin:12px 0 8px">Step 2 — Pick a milk</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; max-width:620px; margin:0 auto">
+        ${opt("state.milk='Whole'","🥛 Whole")}
+        ${opt("state.milk='2%'","🥛 2%")}
+        ${opt("state.milk='Almond'","🌰 Almond")}
+        ${opt("state.milk='Oat'","🌾 Oat")}
+      </div>
+      ${helper('Yes, chocolate milk is a personality.')}
+    `,
+    () => `
+      <h2 class="text-2xl" style="margin:12px 0 8px">Step 3 — The eternal question</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; max-width:620px; margin:0 auto">
+        ${opt("state.order='cereal'","🥣 → 🥛  (ratio control)")}
+        ${opt("state.order='milk'","🥛 → 🥣  (level control)")}
+      </div>
+      ${helper('There is no wrong answer. Only judgment.')}
+    `,
+    () => `
+      <h2 class="text-2xl" style="margin:12px 0 8px">You did it! 🎉</h2>
+      <p style="margin:6px 0 12px">Cereal: <b>${state.cereal||'—'}</b> • Milk: <b>${state.milk||'—'}</b> • Order: <b>${state.order ? (state.order==='milk'?'Milk → Cereal':'Cereal → Milk') : '—'}</b></p>
+      <p style="margin-bottom:14px"><i>${state.order==='milk'?'You’re a Splash‑Tactician.':'You’re a Ratio‑Regulator.'}</i></p>
+      <a id="dlAid" class="cartoon-button bg-green-600 text-white" style="padding:10px 18px; display:inline-block">Download Job Aid 📄</a>
+      <a href="resume.pdf" download class="cartoon-button bg-indigo-600 text-white" style="padding:10px 18px; display:inline-block; margin-left:8px">Resume ⬇️</a>
+    `
+  ];
+
+  function opt(js, label) {
+    return `<button class="cartoon-button" style="background:#fff; padding:10px" onclick="${js}; this.classList.add('selected')">${label}</button>`;
+  }
+  function helper(text) {
+    return `<div style="opacity:.7; margin-top:8px">${text}</div>`;
+  }
+  function render() {
+    stepEl.innerHTML = screens[i]();
+    progress.style.width = ((i+1)/screens.length*100) + '%';
+    prev.style.visibility = i ? 'visible' : 'hidden';
+    if (i === screens.length - 1) {
+      const dl = document.getElementById('dlAid');
+      if (dl) dl.addEventListener('click', (e)=>{ e.preventDefault(); downloadJobAid(state); });
+      next.textContent = 'Restart ↻';
+    } else {
+      next.textContent = 'Next ➡️';
     }
+  }
+  prev.onclick = () => { if (i>0) { i--; render(); } };
+  next.onclick = () => {
+    if (i===0 && !state.cereal) return nudge('Pick a cereal 🙂');
+    if (i===1 && !state.milk) return nudge('Pick your milk 🥛');
+    if (i===2 && !state.order) return nudge('Choose your side!');
+    i = (i >= screens.length-1) ? 0 : i+1;
+    render();
+  };
+  function nudge(msg){
+    const m = document.createElement('div');
+    m.textContent = msg;
+    m.style.cssText = 'margin-top:8px;color:#2d3436;background:#ffeaa7;border:2px solid #2d3436;display:inline-block;padding:6px 10px;border-radius:10px';
+    stepEl.appendChild(m);
+    setTimeout(()=>m.remove(), 1300);
+  }
+  render();
+  modal.classList.add('active');
+}
 
-    function downloadJobAid() {
-      const jobAidContent = `
-        <html><body><h1>Quick Cereal Guide</h1>
-        <ol><li>Gather bowl & spoon</li><li>Add cereal</li><li>Add milk</li></ol>
-        <p>Tip: Cold milk = longer crunch!</p></body></html>`;
-      const blob = new Blob([jobAidContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'cereal-job-aid.html';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
+/* ---------- JOB AID (styled, printable) ---------- */
+function downloadJobAid(state = {cereal:'', milk:'', order:''}) {
+  const ordText = state.order ? (state.order==='milk' ? 'Milk → Cereal (Splash‑Tactician)' : 'Cereal → Milk (Ratio‑Regulator)') : '—';
+  const html = `<!doctype html><meta charset="utf-8"><title>Quick Guide: Cereal</title>
+  <style>
+    body{font-family:Arial,system-ui,sans-serif;max-width:720px;margin:24px auto;line-height:1.55}
+    h1{margin:0 0 12px}
+    .b{border:2px solid #222; border-radius:10px; padding:12px; margin:10px 0}
+    .n{display:inline-block;width:26px;height:26px; border-radius:50%; background:#222;color:#fff;text-align:center; line-height:26px; font-weight:800; margin-right:6px}
+    @media print {.no{display:none}}
+  </style>
+  <h1>Quick Guide: Bowl of Cereal</h1>
+  <div class="b"><b>Cereal:</b> ${state.cereal||'—'} &nbsp; <b>Milk:</b> ${state.milk||'—'} &nbsp; <b>Order:</b> ${ordText}</div>
+  <p><span class="n">1</span>Gather bowl + spoon</p>
+  <p><span class="n">2</span>${state.order==='milk'?'Pour milk first to your level':'Add cereal first for ratio control'}</p>
+  <p><span class="n">3</span>${state.order==='milk'?'Add cereal slowly to desired crunch':'Add milk slowly around edges'}</p>
+  <p><span class="n">4</span>Optional toppings: fruit, nuts, honey</p>
+  <p><span class="n">5</span>Enjoy immediately (cold milk = longer crunch)</p>
+  <p class="no"><i>Tip: Save or print this page.</i></p>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'cereal-job-aid.html'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 600);
+}
 
-    // Wire up buttons after DOM loads
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('launchCourse').addEventListener('click', openFullCourse);
-      document.getElementById('jobAidBtn').addEventListener('click', downloadJobAid);
-      document.getElementById('closeCourse').addEventListener('click', function () {
-        document.getElementById('courseModal').classList.remove('active');
-      });
-      document.getElementById('courseModal').addEventListener('click', function (e) {
-        if (e.target.id === 'courseModal') e.target.classList.remove('active');
-      });
-    });
-  </script>
-</body>
-</html>
+/* ---------- WIRE UP (no inline handlers) ---------- */
+document.addEventListener('DOMContentLoaded', function () {
+  const launch = document.getElementById('launchCourse');
+  const jobAid = document.getElementById('jobAidBtn');
+  const closeBtn = document.getElementById('closeCourse');
+  const modal = document.getElementById('courseModal');
+
+  if (launch) launch.addEventListener('click', openFullCourse);
+  if (jobAid) jobAid.addEventListener('click', (e)=>{ e.preventDefault(); downloadJobAid(); });
+  if (closeBtn) closeBtn.addEventListener('click', ()=> modal.classList.remove('active'));
+  if (modal) modal.addEventListener('click', (e)=>{ if (e.target === modal) modal.classList.remove('active'); });
+});
+</script>
