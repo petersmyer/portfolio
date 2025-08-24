@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peter Smyer — Instructional Design Showcase</title>
+  <style>
+    body{font-family:sans-serif;margin:0;background:#f7fafc;color:#222;text-align:center}
+    h1{margin:14px 0;font-size:24px}
+    .btn{display:inline-block;margin:6px;padding:6px 10px;border:2px solid #000;border-radius:6px;background:#36c;color:#fff;font-weight:700;text-decoration:none;cursor:pointer}
+    .c{background:#fff;border-radius:8px;padding:12px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-width:640px;margin:10px auto;text-align:left}
+    .o{border:1px solid #444;border-radius:6px;padding:4px;margin:4px 0;cursor:pointer}
+    .prog{height:6px;background:#eee;margin:6px 0;border-radius:6px;overflow:hidden}.bar{height:100%;background:#36c;width:0}
+    footer{padding:12px;background:#222;color:#ddd;margin-top:12px;font-size:13px}
+  </style>
+</head>
+<body>
+  <h1>Peter Smyer</h1>
+  <p>Instructional Design Showcase</p>
+  <a class="btn" href="#course">Interactive Course 🚀</a>
+  <a class="btn" href="resume.pdf" download>Resume ⬇️</a>
+
+  <section id="course" class="c">
+    <h2>Mini‑Course: How to Make Cereal</h2>
+    <div class="prog"><div id="bar" class="bar"></div></div>
+    <div id="scr"></div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button id="prev" class="btn" style="background:#fff;color:#000">◀</button>
+      <button id="next" class="btn">▶</button>
+      <span id="hint" style="margin-left:6px;opacity:.75"></span>
+    </div>
+  </section>
+
+  <footer>Chandler, AZ • peter.smyer@gmail.com • 480‑570‑3459</footer>
+
+  <script>
+    let step=0,state={c:"",m:"",o:""};
+    const scr=document.getElementById('scr'),bar=document.getElementById('bar'),hint=document.getElementById('hint');
+    function opt(js,t){return `<div class=o onclick="${js};hint.textContent=''">${t}</div>`}
+    const steps=[
+      ()=>"<p>Welcome! Ready to master cereal?</p>",
+      ()=>`<p><b>Pick cereal</b></p>${opt("state.c='Flakes'","✨ Flakes")}${opt("state.c='Cocoa'","🍫 Cocoa")}${opt("state.c='Oats'","🌾 Oats")}${opt("state.c='Corn'","🌽 Corn")}`,
+      ()=>`<p><b>Pick milk</b></p>${opt("state.m='Whole'","🥛 Whole")}${opt("state.m='2%'","🥛 2%")}${opt("state.m='Almond'","🌰 Almond")}${opt("state.m='Oat'","🌾 Oat")}`,
+      ()=>`<p><b>Order?</b></p>${opt("state.o='cereal'","🥣 then 🥛 (ratio)")}${opt("state.o='milk'","🥛 then 🥣 (level)")}`,
+      ()=>`<p><b>All done!</b><br>You are a <b>${state.o=="milk"?"Splash‑Tactician":"Ratio‑Regulator"}</b>.<br>
+           Cereal: ${state.c||"-"} • Milk: ${state.m||"-"}</p>
+           <a href='resume.pdf' class=btn download>Download Resume</a>`
+    ];
+    function render(){scr.innerHTML=steps[step]();bar.style.width=(step/4*100)+'%';document.getElementById('prev').style.visibility=step?'visible':'hidden'}
+    document.getElementById('prev').onclick=()=>{if(step>0){step--;render()}};
+    document.getElementById('next').onclick=()=>{
+      if(step==1&&!state.c){hint.textContent="Pick cereal";return}
+      if(step==2&&!state.m){hint.textContent="Pick milk";return}
+      if(step==3&&!state.o){hint.textContent="Pick order";return}
+      step=step>=steps.length-1?0:step+1;render()};
+    render();
+  </script>
+</body>
+</html>
