@@ -2,142 +2,350 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Peter Smyer — Instructional Design Showcase</title>
   <style>
-    :root {
-      --indigo1: #667eea;
-      --indigo2: #764ba2;
-      --ink: #2d3748;
-      --gray: #f7fafc;
-      --blue: #3182ce;
-      --green: #38a169;
-    }
-    * { box-sizing:border-box; margin:0; padding:0; }
+    /* Reset and base styles (copied visual style) */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,Cantarell,sans-serif;
-      background: var(--gray);
-      color: var(--ink);
-      line-height:1.6;
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+      line-height:1.6; color:#333; background-color:#f7fafc;
     }
-    header {
-      background: linear-gradient(135deg,var(--indigo1),var(--indigo2));
-      color:#fff; text-align:center; padding:3rem 1rem; position:relative;
+    /* Layout */
+    .container { max-width:1200px; margin:0 auto; padding:0 1.5rem; }
+    .grid { display:grid; gap:2rem; }
+    .flex { display:flex; }
+    .inline-flex { display:inline-flex; }
+    .inline-block { display:inline-block; }
+    @media (min-width:768px){
+      .md-grid-2 { grid-template-columns:repeat(2,1fr); }
+      .md-grid-3 { grid-template-columns:repeat(3,1fr); }
     }
-    header .logo {
-      position:absolute; top:16px; left:16px; display:flex; align-items:center; gap:8px; text-decoration:none;
+    /* Typography */
+    .text-center { text-align:center; }
+    .text-6xl { font-size:3.75rem; line-height:1; }
+    .text-5xl { font-size:3rem; line-height:1.1; font-weight:700; }
+    .text-4xl { font-size:2.25rem; line-height:1.2; font-weight:700; }
+    .text-3xl { font-size:1.875rem; line-height:1.3; font-weight:700; }
+    .text-2xl { font-size:1.5rem; line-height:1.4; font-weight:600; }
+    .text-xl { font-size:1.25rem; line-height:1.5; }
+    .text-lg { font-size:1.125rem; line-height:1.6; }
+    .font-bold { font-weight:700; }
+    .font-semibold { font-weight:600; }
+    .font-medium { font-weight:500; }
+    .font-light { font-weight:300; }
+    /* Colors */
+    .text-white { color:#fff; }
+    .text-gray-800 { color:#2d3748; }
+    .text-gray-700 { color:#4a5568; }
+    .text-gray-600 { color:#718096; }
+    .text-gray-400 { color:#a0aec0; }
+    .text-gray-300 { color:#e2e8f0; }
+    .text-blue-600 { color:#3182ce; }
+    .text-green-600 { color:#38a169; }
+    .text-indigo-600 { color:#5a67d8; }
+    .bg-white { background:#fff; }
+    .bg-gray-50 { background:#f7fafc; }
+    .bg-gray-100 { background:#f7fafc; }
+    .bg-gray-700 { background:#4a5568; }
+    .bg-gray-800 { background:#2d3748; }
+    .bg-blue-600 { background:#3182ce; }
+    .bg-green-600 { background:#38a169; }
+    .bg-indigo-600 { background:#5a67d8; }
+    /* Spacing */
+    .py-20 { padding:5rem 0; }
+    .py-16 { padding:4rem 0; }
+    .py-12 { padding:3rem 0; }
+    .p-12 { padding:3rem; }
+    .p-8 { padding:2rem; }
+    .p-6 { padding:1.5rem; }
+    .px-8 { padding:0 2rem; }
+    .px-6 { padding:0 1.5rem; }
+    .px-3 { padding:0 .75rem; }
+    .py-4 { padding:1rem 0; }
+    .py-3 { padding:.75rem 0; }
+    .py-1 { padding:.25rem 0; }
+    .mb-12 { margin-bottom:3rem; }
+    .mb-8 { margin-bottom:2rem; }
+    .mb-6 { margin-bottom:1.5rem; }
+    .mb-4 { margin-bottom:1rem; }
+    .mb-2 { margin-bottom:.5rem; }
+    .mt-8 { margin-top:2rem; }
+    .mx-auto { margin:0 auto; }
+    .pt-8 { padding-top:2rem; }
+    /* Utilities */
+    .items-center{align-items:center;}
+    .items-start{align-items:flex-start;}
+    .gap-6{gap:1.5rem;}
+    .gap-3{gap:.75rem;}
+    .gap-2{gap:.5rem;}
+    .w-24{width:6rem;} .w-2{width:.5rem;} .w-full{width:100%;}
+    .h-1{height:.25rem;} .h-2{height:.5rem;}
+    .max-w-4xl{max-width:56rem;} .max-w-6xl{max-width:72rem;}
+    .leading-relaxed{line-height:1.625;}
+    .flex-wrap{flex-wrap:wrap;}
+    /* Borders */
+    .rounded-xl { border-radius:.75rem; }
+    .rounded-lg { border-radius:.5rem; }
+    .rounded-full { border-radius:9999px; }
+    .border-t { border-top:1px solid #718096; }
+    /* Header gradient */
+    .cereal-gradient {
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
     }
-    header .logo svg { width:40px; height:40px; }
-    header h1 { font-size:2.5rem; font-weight:700; margin-bottom:.5rem; }
-    header h2 { font-weight:400; font-size:1.25rem; }
-    .section { padding:3rem 1rem; }
-    .section h2 { text-align:center; font-size:1.75rem; margin-bottom:.75rem; }
-    .line { width:60px; height:3px; background:var(--blue); margin:0 auto 1.5rem; }
-    .grid2 { display:grid; gap:1.25rem; }
-    @media(min-width:768px){
-      .grid2 { grid-template-columns:repeat(2,1fr); }
+    /* Project gradients */
+    .blue-gradient {
+      background:linear-gradient(135deg,#ebf8ff 0%,#e6fffa 100%);
     }
-    .card {
-      background:#fff; border-radius:10px; padding:1rem 1.25rem;
-      box-shadow:0 3px 8px rgba(0,0,0,.08);
-      font-size:.95rem;
-      transition:.3s;
+    .green-gradient {
+      background:linear-gradient(135deg,#f0fff4 0%,#d6f5d6 100%);
     }
-    .card h3 { margin-bottom:.5rem; font-size:1.1rem; }
-    .card p { margin-bottom:.5rem; }
-    .card:hover { transform:translateY(-3px); }
-    ul { margin-left:1rem; }
-    li { margin-bottom:.25rem; }
-    .btn {
-      display:inline-block; background:var(--blue); color:#fff; border:none;
-      padding:.5rem 1rem; border-radius:6px; font-weight:600; cursor:pointer;
-      text-decoration:none; font-size:.9rem;
+    /* Interactive lifts */
+    .hover-lift { transition:transform .3s ease, box-shadow .3s ease; }
+    .hover-lift:hover { transform:translateY(-8px) rotate(-1deg); box-shadow:0 20px 40px rgba(0,0,0,.15); }
+    /* Buttons (visual only) */
+    .cartoon-button {
+      border:3px solid #2c3e50;
+      box-shadow:4px 4px 0 #2c3e50;
+      transition:all .2s ease;
+      font-weight:bold; cursor:pointer; text-decoration:none;
+      display:inline-block; text-align:center;
     }
-    .btn:hover { background:#2c5282; }
-    footer {
-      background:#2d3748; color:#e2e8f0; text-align:center; padding:1.5rem 1rem;
-      font-size:.9rem;
+    .cartoon-button:hover { transform:translateY(-2px); box-shadow:6px 6px 0 #2c3e50; }
+    .cartoon-button:active { transform:translateY(2px); box-shadow:2px 2px 0 #2c3e50; }
+    /* Float animation */
+    .floating-element { animation:float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    /* Skill tags */
+    .skill-tag { background:#e2e8f0; color:#2d3748; padding:.25rem .75rem; border-radius:9999px; font-size:.875rem; display:inline-block; margin:.25rem; }
+    .skill-tag.blue{ background:#ebf8ff; color:#2c5282; }
+    .skill-tag.green{ background:#f0fff4; color:#276749; }
+    .skill-tag.purple{ background:#faf5ff; color:#553c9a; }
+    .skill-tag.yellow{ background:#fffff0; color:#975a16; }
+    /* Bullets */
+    .bullet-blue,.bullet-green,.bullet-purple{ width:.5rem; height:.5rem; border-radius:50%; display:inline-block; }
+    .bullet-blue{ background:#4299e1; } .bullet-green{ background:#48bb78; } .bullet-purple{ background:#9f7aea; }
+    .skill-list li{ display:flex; align-items:center; gap:.5rem; margin-bottom:.5rem; }
+    /* Frosted */
+    .backdrop-blur{ background:rgba(255,255,255,.2); backdrop-filter:blur(4px); display:inline-block;}
+    /* Responsive tweaks */
+    @media (max-width:768px){
+      .text-5xl{font-size:2.5rem;} .text-4xl{font-size:2rem;} .text-6xl{font-size:3rem;}
+      .py-20{padding:3rem 0;} .py-16{padding:2.5rem 0;} .p-12{padding:2rem;} .p-8{padding:1.5rem;}
     }
-    footer a { color:#fff; text-decoration:none; }
+    /* PS cursive logo styling */
+    .ps-logo { width:56px; height:56px; display:block; margin:0 auto 1rem; }
   </style>
 </head>
 <body>
-  <header>
-    <a class="logo" href="index.html">
-      <!-- PS cursive logo -->
-      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stop-color="#667eea"/>
-            <stop offset="100%" stop-color="#764ba2"/>
-          </linearGradient>
-        </defs>
-        <circle cx="60" cy="60" r="55" fill="#fff" stroke="#2d3436" stroke-width="4"/>
-        <path d="M35 85 Q38 40, 50 38 Q68 36, 70 50 Q72 62, 55 64 Q44 66, 39 60"
-              fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M80 40 Q64 32, 58 42 Q52 52, 72 56 Q92 60, 76 78 Q64 92, 48 84"
-              fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span style="font-weight:700;color:#fff;">PS</span>
-    </a>
-    <h1>Peter Smyer</h1>
-    <h2>Instructional Design Showcase</h2>
+  <!-- Header -->
+  <header class="cereal-gradient text-white py-20">
+    <div class="container text-center">
+      <div class="mb-6">
+        <!-- PS cursive logo replaces the palette -->
+        <svg class="ps-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="PS logo">
+          <defs>
+            <linearGradient id="psg" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#667eea"/>
+              <stop offset="100%" stop-color="#764ba2"/>
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="55" fill="#ffffff" stroke="#2d3436" stroke-width="4"/>
+          <!-- cursive P -->
+          <path d="M35 85 Q38 40, 50 38 Q68 36, 70 50 Q72 62, 55 64 Q44 66, 39 60"
+                fill="none" stroke="url(#psg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- cursive S -->
+          <path d="M80 40 Q64 32, 58 42 Q52 52, 72 56 Q92 60, 76 78 Q64 92, 48 84"
+                fill="none" stroke="url(#psg)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+        <h1 class="text-5xl mb-4">Peter Smyer</h1>
+        <h2 class="text-2xl font-light mb-6">Instructional Design Showcase</h2>
+      </div>
+      <div class="backdrop-blur rounded-lg p-6">
+        <p class="text-xl font-medium">
+          Instructional Designer • Learning Experience Creator • Educational Problem Solver
+        </p>
+      </div>
+    </div>
   </header>
 
-  <!-- About + Skills -->
-  <section class="section">
-    <h2>About Me & Skills</h2>
-    <div class="line"></div>
-    <div class="grid2">
-      <div class="card">
-        <h3>About Me</h3>
-        <p>I have 6+ years of Learning & Development experience, crafting engaging instructional solutions that drive real results. My specialty is simplifying complexity into clear, actionable learning.</p>
-        <p>When I’m not designing, I explore ed-tech innovations and creative ways to make learning fun and effective.</p>
+  <!-- About Me -->
+  <section class="py-16 bg-white">
+    <div class="container max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">About Me</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
       </div>
-      <div class="card">
-        <h3>Credentials & Tools</h3>
-        <ul>
-          <li><strong>Tools:</strong> Articulate 360, Canva, Adobe Suite, LearnUpon</li>
-          <li><strong>Methods:</strong> ADDIE, Adult Learning Theory, Bloom’s Taxonomy, Kirkpatrick</li>
-          <li><strong>Strengths:</strong> Needs analysis, multimedia design, strategy</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Portfolio -->
-  <section class="section" style="background:#f0f4f8">
-    <h2>Portfolio Projects</h2>
-    <div class="line"></div>
-    <div class="grid2">
-      <div class="card">
-        <h3>Interactive eCourse</h3>
-        <p>A playful step-by-step course: <em>"How to Make a Bowl of Cereal"</em>, featuring branching choices and a quiz.</p>
-        <a href="course.html" class="btn">Launch Course 🚀</a>
-      </div>
-      <div class="card">
-        <h3>Job Aid</h3>
-        <p>A one-page quick reference for cereal prep, viewable online for just-in-time learning.</p>
-        <a href="job-aid.html" class="btn" style="background:var(--green)">View Job Aid 📋</a>
+      <div class="bg-gray-50 rounded-xl p-8 hover-lift">
+        <div class="flex items-start gap-6">
+          <div class="text-4xl floating-element">👨‍💻</div>
+          <div>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+              With over 6 years of experience in Learning & Development, I specialize in creating engaging, effective instructional experiences that truly connect with learners and drive meaningful results.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+              My expertise spans multimedia production, adult learning theories, and transforming complex concepts into clear, actionable learning experiences. Whether it's eLearning modules, job aids, or comprehensive training programs, I bring creativity and pedagogical expertise to every project.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+              When I'm not designing learning experiences, you'll find me staying current with educational technology trends and exploring innovative ways to make learning more engaging and effective.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Resume -->
-  <section class="section">
-    <h2>Resume</h2>
-    <div class="line"></div>
-    <div class="card" style="text-align:center; max-width:600px; margin:0 auto;">
-      <p>Download my resume for experience, education, and achievements.</p>
-      <a href="resume.pdf" class="btn" download>⬇️ Download Resume</a>
+  <!-- Credentials & Skills -->
+  <section class="py-16 bg-gray-100">
+    <div class="container max-w-6xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">Credentials & Skills</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+        <p class="text-xl text-gray-600">Tools and expertise that power amazing learning experiences</p>
+      </div>
+
+      <div class="grid md-grid-3">
+        <!-- Technical Skills -->
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4 floating-element">🛠️</div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Technical Tools</h3>
+          <ul class="skill-list">
+            <li><span class="bullet-blue"></span>Articulate 360</li>
+            <li><span class="bullet-blue"></span>Canva</li>
+            <li><span class="bullet-blue"></span>Adobe Suite</li>
+            <li><span class="bullet-blue"></span>LearnUpon</li>
+          </ul>
+        </div>
+
+        <!-- Design Methodologies -->
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4 floating-element" style="animation-delay:-0.5s;">📚</div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Design Methodologies</h3>
+          <ul class="skill-list">
+            <li><span class="bullet-green"></span>ADDIE Model</li>
+            <li><span class="bullet-green"></span>Adult Learning Theories</li>
+            <li><span class="bullet-green"></span>Bloom's Taxonomy</li>
+            <li><span class="bullet-green"></span>Kirkpatrick Model</li>
+          </ul>
+        </div>
+
+        <!-- Analysis & Strategy -->
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4 floating-element" style="animation-delay:-1s;">📊</div>
+          <h3 class="text-xl font-semibold mb-4 text-gray-800">Analysis & Strategy</h3>
+          <ul class="skill-list">
+            <li><span class="bullet-purple"></span>Data Analysis</li>
+            <li><span class="bullet-purple"></span>Needs Assessment</li>
+            <li><span class="bullet-purple"></span>Learning Objectives</li>
+            <li><span class="bullet-purple"></span>Performance Metrics</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <footer>
-    <p>📧 peter.smyer@email.com | 📱 480-570-3459 | 
-      <a href="https://linkedin.com/in/petersmyer" target="_blank">LinkedIn</a>
-    </p>
-    <p style="margin-top:.5rem;font-size:12px">© 2025 Peter Smyer. Designed with passion for learning.</p>
+  <!-- Portfolio Projects -->
+  <section class="py-16 bg-white">
+    <div class="container max-w-6xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">Portfolio Projects</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+        <p class="text-xl text-gray-600">Featured work that demonstrates my approach to instructional design</p>
+      </div>
+
+      <div class="grid md-grid-2">
+        <!-- Project 1 -->
+        <div class="blue-gradient rounded-xl p-8 hover-lift">
+          <div class="text-5xl mb-6 text-center floating-element">🥣</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Interactive eCourse</h3>
+          <h4 class="text-xl font-semibold text-blue-600 mb-4">"How to Make a Bowl of Cereal"</h4>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            A comprehensive, interactive learning experience that breaks down the seemingly simple task of cereal preparation into engaging, bite-sized modules. Features branching scenarios, knowledge checks, and multimedia elements.
+          </p>
+          <div class="mb-6">
+            <span class="skill-tag blue">Storyline 360</span>
+            <span class="skill-tag green">Interactive</span>
+            <span class="skill-tag purple">Multimedia</span>
+          </div>
+          <!-- Functional link -->
+          <a class="cartoon-button bg-blue-600 text-white py-3 px-6 rounded-lg w-full" href="course.html">
+            Launch Course 🚀
+          </a>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="green-gradient rounded-xl p-8 hover-lift">
+          <div class="text-5xl mb-6 text-center floating-element" style="animation-delay:-0.5s;">📋</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Job Aid</h3>
+          <h4 class="text-xl font-semibold text-green-600 mb-4">"Quick Guide: How to Make a Bowl of Cereal"</h4>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            A concise, visually appealing reference guide designed for just-in-time learning. Perfect for new breakfast enthusiasts or anyone needing a quick refresher on proper cereal preparation techniques.
+          </p>
+          <div class="mb-6">
+            <span class="skill-tag green">Design</span>
+            <span class="skill-tag blue">Job Aid</span>
+            <span class="skill-tag yellow">Quick Reference</span>
+          </div>
+          <!-- Functional link -->
+          <a class="cartoon-button bg-green-600 text-white py-3 px-6 rounded-lg w-full" href="job-aid.html">
+            View Job Aid 📄
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resume Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container max-w-4xl text-center">
+      <div class="bg-white rounded-xl p-12 hover-lift">
+        <div class="text-6xl mb-6 floating-element">📄</div>
+        <h2 class="text-3xl text-gray-800 mb-4">Ready to Learn More?</h2>
+        <p class="text-xl text-gray-600 mb-8">
+          Download my full resume to see the complete picture of my experience, education, and achievements in instructional design.
+        </p>
+        <!-- Functional download -->
+        <a class="cartoon-button bg-indigo-600 text-white py-4 px-8 rounded-lg text-lg inline-flex items-center gap-2" href="resume.pdf" download>
+          <span>Download My Resume</span>
+          <span>⬇️</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container max-w-4xl">
+      <div class="text-center mb-8">
+        <h3 class="text-2xl font-bold mb-4">Let's Connect!</h3>
+        <p class="text-gray-300 mb-6">Ready to discuss your next learning project? I'm always up for a good conversation about instructional design and educational innovation.</p>
+      </div>
+
+      <div class="grid md-grid-3">
+        <div class="bg-gray-700 rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2 floating-element">📧</div>
+          <h4 class="font-semibold mb-2">Email</h4>
+          <p class="text-gray-300">peter.smyer@email.com</p>
+        </div>
+
+        <div class="bg-gray-700 rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2 floating-element" style="animation-delay:-0.5s;">📱</div>
+          <h4 class="font-semibold mb-2">Phone</h4>
+          <p class="text-gray-300">480-570-3459</p>
+        </div>
+
+        <div class="bg-gray-700 rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2 floating-element" style="animation-delay:-1s;">💼</div>
+          <h4 class="font-semibold mb-2">LinkedIn</h4>
+          <p class="text-gray-300">linkedin.com/in/petersmyer</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-8 pt-8 border-t">
+        <p class="text-gray-400">© 2025 Peter Smyer. All rights reserved. Designed with passion for learning!</p>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
