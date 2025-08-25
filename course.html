@@ -1,366 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Breakfast Basics — Interactive Course</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Breakfast Basics: How to Make a Bowl of Cereal</title>
 <style>
-  /* Base */
+  :root{
+    --indigo1:#667eea; /* match index header tone */
+    --indigo2:#764ba2;
+    --teal1:#00b894;
+    --teal2:#00cec9;
+    --ink:#2d3436;
+    --paper:#ffffff;
+    --soft:#f8f9fa;
+    --ok:#28a745;
+    --no:#dc3545;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,Cantarell,sans-serif;
-    background:linear-gradient(135deg,#ffeaa7 0%,#fab1a0 50%,#74b9ff 100%);
-    min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:24px
+    background:linear-gradient(135deg,var(--indigo1) 0%, var(--indigo2) 100%);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px;
   }
-  .container{width:100%; max-width:900px}
+  .wrap{
+    width:100%; max-width:880px; background:var(--paper); border:4px solid var(--ink);
+    border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,.15); overflow:hidden; position:relative;
+  }
+  /* PS logo bar */
+  .bar{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#ffeaa7 0%, #fab1a0 50%, #74b9ff 100%);
+    padding:24px 56px;
+  }
+  .logo{
+    position:absolute; left:18px; top:14px; display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+  }
+  .logo svg{width:44px;height:44px}
+  .logo .tag{font-weight:700;color:var(--ink);font-size:14px}
+  .title{font-size:clamp(24px,3.4vw,36px); font-weight:800; color:var(--ink); text-shadow:2px 2px 0 #fdcb6e}
+  .sub{margin-top:6px; color:#2d3436cc; font-weight:600}
 
-  /* Header */
-  .header{
-    width:100%; display:flex; justify-content:center; margin-bottom:18px
+  .progress{
+    position:absolute; left:0; top:0; height:6px; width:0%;
+    background:linear-gradient(90deg,var(--teal1),var(--teal2)); transition:width .3s ease;
   }
-  .logo-ps{
-    font-size:40px; font-family:"Brush Script MT",cursive; font-weight:700; letter-spacing:-.04em;
-    color:#fff; padding:.4rem 1rem; border:3px solid #fff; border-radius:14px;
-    background:linear-gradient(135deg,#3182ce,#5a67d8); text-shadow:2px 2px 0 rgba(0,0,0,.2);
-    box-shadow:6px 6px 0 rgba(0,0,0,.2)
+  .num{
+    position:absolute; right:16px; top:12px; background:#00000010; color:var(--ink);
+    font-weight:700; padding:6px 12px; border-radius:9999px; font-size:14px;
   }
 
-  /* Course Card */
-  .course{
-    background:#fff; border:4px solid #2d3436; border-radius:20px;
-    box-shadow:0 20px 40px rgba(0,0,0,.1); overflow:hidden
-  }
-  .progress{height:8px; background:linear-gradient(90deg,#00b894,#00cec9); width:0%; transition:width .3s}
-  .meta{position:absolute; top:14px; right:16px; background:rgba(45,52,54,.08);
-    padding:6px 12px; border-radius:20px; font-weight:700; color:#2d3436; font-size:14px}
-
-  .stage{position:relative; min-height:560px; display:none; padding:36px; text-align:center}
+  .stage{padding:28px 24px 88px; min-height:520px; display:none; text-align:center}
   .stage.active{display:block}
-  h1,h2{color:#2d3436; text-shadow:2px 2px 0 #fdcb6e}
-  h1{font-size:2.3rem; margin-bottom:10px}
-  h2{font-size:1.9rem; margin-bottom:10px}
-  .lead{color:#636e72; font-size:1.1rem; line-height:1.6; max-width:640px; margin:10px auto 0}
-  .emoji{font-size:3rem; margin:14px 0; animation:bounce 2s infinite}
+  .h1{font-size:clamp(22px,3vw,32px); font-weight:800; color:var(--ink); margin-bottom:10px; text-shadow:2px 2px 0 #fdcb6e}
+  .p{color:#636e72; font-size:clamp(16px,2.2vw,18px); line-height:1.6; max-width:640px; margin:0 auto}
+  .big{font-size:40px; margin:16px 0; animation:bounce 2s infinite}
+  @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-16px)}60%{transform:translateY(-8px)}}
 
-  /* Buttons */
   .btn{
-    background:linear-gradient(135deg,#00b894,#00cec9); color:#fff; border:none;
-    padding:14px 26px; font-size:1.05rem; border-radius:50px; cursor:pointer; margin:10px;
-    transition:.2s; font-weight:700; border:3px solid #2d3436; box-shadow:4px 4px 0 #2d3436
+    background:linear-gradient(135deg,var(--teal1),var(--teal2)); color:#fff; border:none;
+    padding:12px 22px; border-radius:9999px; cursor:pointer; font-weight:800;
+    border:3px solid var(--ink); box-shadow:4px 4px 0 var(--ink); transition:transform .15s, box-shadow .15s;
   }
-  .btn:hover{transform:translateY(-2px); box-shadow:6px 6px 0 #2d3436}
-  .btn:active{transform:translateY(2px); box-shadow:2px 2px 0 #2d3436}
-  .btn-alt{background:linear-gradient(135deg,#fdcb6e,#e17055)}
-  .btn-danger{background:linear-gradient(135deg,#fd79a8,#e84393)}
-  .nav{display:flex; justify-content:center; gap:12px; padding:18px}
-  .hidden{display:none !important}
+  .btn:hover{transform:translateY(-2px); box-shadow:6px 6px 0 var(--ink)}
+  .btn:active{transform:translateY(1px); box-shadow:2px 2px 0 var(--ink)}
+  .btn.alt{background:linear-gradient(135deg,#fdcb6e,#e17055)}
+  .btn.warn{background:linear-gradient(135deg,#fd79a8,#e84393)}
 
-  /* Grids & UI bits */
-  .tools{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:440px; margin:18px auto}
-  .tool{background:#f8f9fa; border:3px solid #2d3436; border-radius:14px; padding:16px}
-  .choices{display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin:18px 0}
-  .anim{height:150px; display:flex; align-items:center; justify-content:center; margin:10px 0}
-  .pour{font-size:2.4rem; opacity:0}
-  @keyframes pour{0%{opacity:0;transform:translateY(-40px)}50%{opacity:1;transform:translateY(0)}100%{opacity:1;transform:translateY(16px)}}
-  @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}60%{transform:translateY(-8px)}}
+  .nav{
+    position:absolute; left:50%; bottom:18px; transform:translateX(-50%);
+    display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+  }
 
-  .quiz{background:#f8f9fa; border:3px solid #2d3436; border-radius:14px; padding:18px; max-width:640px; margin:10px auto}
+  .grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; max-width:420px; margin:20px auto}
+  .card{
+    background:var(--soft); border:3px solid var(--ink); border-radius:16px; padding:16px; transition:transform .15s;
+  }
+  .card:hover{transform:scale(1.03)}
+  .pour{font-size:34px; opacity:0; animation:pour 2s ease-in-out}
+  @keyframes pour{0%{opacity:0; transform:translateY(-40px)}50%{opacity:1; transform:translateY(0)}100%{opacity:1; transform:translateY(16px)}}
+
+  .choices{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:22px 0}
+
+  .q{background:var(--soft); border:3px solid var(--ink); border-radius:16px; padding:18px; max-width:640px; margin:0 auto}
   .opts{display:flex; flex-direction:column; gap:10px; margin-top:12px}
-  .opt{background:#fff; border:2px solid #ddd; border-radius:10px; padding:12px; text-align:left; cursor:pointer; transition:.15s}
-  .opt:hover{border-color:#00b894; background:#f0f9ff}
-  .correct{background:#d4edda !important; border-color:#28a745 !important}
-  .incorrect{background:#f8d7da !important; border-color:#dc3545 !important}
-  .fb{display:none; margin-top:12px; padding:12px; border-radius:10px; font-weight:700}
-  .fb.ok{background:#d4edda; color:#155724; border:2px solid #28a745}
-  .fb.no{background:#f8d7da; color:#721c24; border:2px solid #dc3545}
+  .opt{
+    background:#fff; border:2px solid #ddd; border-radius:12px; padding:12px 14px; text-align:left; cursor:pointer; transition:.2s;
+  }
+  .opt:hover{border-color:var(--teal1); background:#f0f9ff}
+  /* Only add these classes AFTER selection via JS */
+  .opt.correct{background:#d4edda; border-color:var(--ok)}
+  .opt.incorrect{background:#f8d7da; border-color:var(--no)}
 
-  /* Mobile */
+  .fb{display:none; margin-top:12px; padding:12px; border-radius:12px; font-weight:700}
+  .fb.ok{display:block; background:#d4edda; color:#155724; border:2px solid var(--ok)}
+  .fb.no{display:block; background:#f8d7da; color:#721c24; border:2px solid var(--no)}
+
+  .note{color:#636e72; font-size:13px; margin-top:10px}
+
+  .return{margin-top:10px}
+
   @media (max-width:768px){
-    .stage{padding:22px; min-height:520px}
-    h1{font-size:1.9rem} h2{font-size:1.6rem}
-    .tools{grid-template-columns:1fr}
-    .logo-ps{font-size:34px}
+    .bar{padding:20px 56px}
+    .stage{padding:22px 18px 96px}
+    .grid{grid-template-columns:1fr}
   }
 </style>
 </head>
 <body>
-  <div class="header"><div class="logo-ps">PS</div></div>
+  <div class="wrap" id="app">
+    <div class="progress" id="progress"></div>
+    <div class="num" id="num">1 / 12</div>
 
-  <div class="container">
-    <div class="course">
-      <div id="progress" class="progress"></div>
+    <!-- Header / Branding -->
+    <div class="bar">
+      <a class="logo" href="index.html" aria-label="Back to portfolio">
+        <!-- Cursive-ish PS logo, pure SVG strokes -->
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PS">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#667eea"/>
+              <stop offset="100%" stop-color="#764ba2"/>
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="55" fill="#ffffff" stroke="#2d3436" stroke-width="4"/>
+          <!-- P stroke -->
+          <path d="M35 85
+                   Q38 40, 50 38
+                   Q68 36, 70 50
+                   Q72 62, 55 64
+                   Q44 66, 39 60"
+                fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- S stroke -->
+          <path d="M80 40
+                   Q64 32, 58 42
+                   Q52 52, 72 56
+                   Q92 60, 76 78
+                   Q64 92, 48 84"
+                fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="tag">Peter Smyer</span>
+      </a>
+      <div class="title">Breakfast Basics</div>
+      <div class="sub">How to Make a Bowl of Cereal</div>
+    </div>
 
-      <!-- Stage 1: Landing -->
-      <section id="s1" class="stage active">
-        <h1>🥣 Breakfast Basics</h1>
-        <div class="emoji">🥛🥄🌾</div>
-        <p class="lead">
-          Learn the ancient art of cereal preparation in a fun, interactive, self‑paced mini‑course.
-          <br><b>Time:</b> ~5 minutes • <b>Level:</b> Beginner‑friendly
-        </p>
-        <div class="nav" id="startWrap">
-          <button class="btn" id="startBtn">Start Course 🚀</button>
-        </div>
-        <div class="meta" id="meta">1 / 12</div>
-      </section>
-
-      <!-- Stage 2: Objectives -->
-      <section id="s2" class="stage">
-        <h2>What You’ll Master</h2>
-        <div class="emoji">🎯</div>
-        <p class="lead">
-          ✅ Identify essential tools • ✅ Follow the sequence • ✅ Make the big cereal vs. milk call •
-          ✅ Customize with toppings • ✅ Avoid soggy disasters
-        </p>
-      </section>
-
-      <!-- Stage 3: Gather Tools -->
-      <section id="s3" class="stage">
-        <h2>Step 1 — Gather Tools</h2>
-        <p class="lead">Everything you need within reach = less chaos, more crunch.</p>
-        <div class="tools">
-          <div class="tool"><div style="font-size:1.8rem">🥣</div><b>Bowl</b><br><small>Medium‑large</small></div>
-          <div class="tool"><div style="font-size:1.8rem">🥄</div><b>Spoon</b><br><small>Soup spoon</small></div>
-          <div class="tool"><div style="font-size:1.8rem">🌾</div><b>Cereal</b><br><small>Your fave</small></div>
-          <div class="tool"><div style="font-size:1.8rem">🥛</div><b>Milk</b><br><small>Cold & fresh</small></div>
-        </div>
-      </section>
-
-      <!-- Stage 4: Add Cereal -->
-      <section id="s4" class="stage">
-        <h2>Step 2 — Add the Cereal</h2>
-        <p class="lead">Pour slowly; aim for ~⅔ full to leave room for milk.</p>
-        <div class="anim"><div id="pourCereal" class="pour">🌾 ➡️ 🥣</div></div>
-        <button class="btn btn-alt" id="btnPourCereal">Watch the pour 🌾</button>
-      </section>
-
-      <!-- Stage 5: The Debate -->
-      <section id="s5" class="stage">
-        <h2>🤔 The Great Debate</h2>
-        <p class="lead"><b>Which do you add first?</b> Choose wisely—your breakfast reputation depends on it.</p>
-        <div class="choices">
-          <button class="btn" id="chooseCereal">🌾 Cereal First</button>
-          <button class="btn btn-danger" id="chooseMilk">🥛 Milk First</button>
-        </div>
-      </section>
-
-      <!-- Stage 6a: Cereal First Outcome -->
-      <section id="s6a" class="stage">
-        <h2>🎉 Excellent Choice</h2>
-        <p class="lead">
-          Cereal first = perfect ratio control, less splash, more crunch, calmer mornings.
-        </p>
-      </section>
-
-      <!-- Stage 6b: Milk First Outcome -->
-      <section id="s6b" class="stage">
-        <h2>😅 Bold Choice</h2>
-        <p class="lead">
-          Milk first can lead to splashy chaos and ratio mysteries—but we respect trailblazers. Let’s proceed!
-        </p>
-      </section>
-
-      <!-- Stage 7: Add Milk -->
-      <section id="s7" class="stage">
-        <h2>Step 3 — Add the Milk</h2>
-        <p class="lead">Pour around the edges to prevent splashing and preserve crunch.</p>
-        <div class="anim"><div id="pourMilk" class="pour">🥛 ➡️ 🥣</div></div>
-        <button class="btn" id="btnPourMilk">Pour the milk 🥛</button>
-      </section>
-
-      <!-- Stage 8: Toppings -->
-      <section id="s8" class="stage">
-        <h2>Step 4 — Optional Toppings</h2>
-        <p class="lead">Level up the bowl:</p>
-        <div class="tools">
-          <div class="tool"><div style="font-size:1.8rem">🍌</div><b>Banana</b><br><small>Classic, potassium</small></div>
-          <div class="tool"><div style="font-size:1.8rem">🍓</div><b>Berries</b><br><small>Burst of flavor</small></div>
-          <div class="tool"><div style="font-size:1.8rem">🥜</div><b>Nuts</b><br><small>Protein, crunch</small></div>
-          <div class="tool"><div style="font-size:1.8rem">🍯</div><b>Honey</b><br><small>Natural sweet</small></div>
-        </div>
-      </section>
-
-      <!-- Stage 9: Quiz 1 -->
-      <section id="s9" class="stage">
-        <h2>🧠 Knowledge Check (1/3)</h2>
-        <div class="quiz">
-          <p><b>What’s the correct order?</b></p>
-          <div class="opts">
-            <div class="opt">Milk → Cereal → Bowl</div>
-            <div class="opt correct">Bowl → Cereal → Milk</div>
-            <div class="opt">Cereal → Milk → Bowl</div>
-            <div class="opt">It doesn’t matter</div>
-          </div>
-          <div id="fb1" class="fb"></div>
-        </div>
-      </section>
-
-      <!-- Stage 10: Quiz 2 -->
-      <section id="s10" class="stage">
-        <h2>🧠 Knowledge Check (2/3)</h2>
-        <div class="quiz">
-          <p><b>Why pour milk around the edges?</b></p>
-          <div class="opts">
-            <div class="opt">Looks professional</div>
-            <div class="opt correct">Prevents splashing and preserves crunch</div>
-            <div class="opt">Makes milk taste better</div>
-            <div class="opt">Just a tradition</div>
-          </div>
-          <div id="fb2" class="fb"></div>
-        </div>
-      </section>
-
-      <!-- Stage 11: Quiz 3 -->
-      <section id="s11" class="stage">
-        <h2>🧠 Knowledge Check (3/3)</h2>
-        <div class="quiz">
-          <p><b>Ideal milk level?</b></p>
-          <div class="opts">
-            <div class="opt">Fill to the top</div>
-            <div class="opt correct">Just enough to barely cover the cereal</div>
-            <div class="opt">Half bowl milk</div>
-            <div class="opt">As little milk as possible</div>
-          </div>
-          <div id="fb3" class="fb"></div>
-        </div>
-      </section>
-
-      <!-- Stage 12: Complete -->
-      <section id="s12" class="stage">
-        <h1>🎉 You Did It!</h1>
-        <p class="lead" id="resultText">
-          You’ve completed Breakfast Basics. Your breakfast game will never be the same.
-          <br><b>Score:</b> <span id="scoreOut">0/3</span>
-        </p>
-        <div class="nav">
-          <a class="btn btn-alt" href="index.html">↩️ Return to Portfolio</a>
-          <button class="btn" id="restart">🔄 Take Again</button>
-        </div>
-      </section>
-
-      <!-- Bottom nav (hidden until after Start) -->
-      <div class="nav hidden" id="navBar">
-        <button class="btn" id="prev">⬅️ Back</button>
-        <button class="btn" id="next">Next ➡️</button>
+    <!-- Slides -->
+    <section class="stage active" id="s1">
+      <div class="big">🥛🥄🌾</div>
+      <h2 class="h1">Welcome!</h2>
+      <p class="p">
+        Learn the ancient art of cereal preparation in a fun, interactive mini‑course.<br>
+        <strong>Duration:</strong> ~5 minutes • <strong>Difficulty:</strong> Beginner‑friendly
+      </p>
+      <div style="margin-top:18px">
+        <button class="btn" id="startBtn">Start Course 🚀</button>
       </div>
+    </section>
+
+    <section class="stage" id="s2">
+      <h2 class="h1">What You’ll Master</h2>
+      <div class="big">🎯</div>
+      <div class="p" style="max-width:520px; margin-top:6px">
+        <ul style="text-align:left; margin:0 auto; max-width:420px; line-height:1.8">
+          <li>✅ Identify essential cereal‑making tools</li>
+          <li>✅ Follow the proper prep sequence</li>
+          <li>✅ Decide cereal‑first vs. milk‑first (wisely 😄)</li>
+          <li>✅ Customize with creative toppings</li>
+          <li>✅ Avoid common breakfast disasters</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="s3">
+      <h2 class="h1">Step 1: Gather Tools</h2>
+      <p class="p">Every cereal master needs the right equipment. Let’s collect what you’ll need.</p>
+      <div class="grid">
+        <div class="card"><div style="font-size:28px">🥣</div><strong>Bowl</strong><br><small>Medium to large</small></div>
+        <div class="card"><div style="font-size:28px">🥄</div><strong>Spoon</strong><br><small>Soup spoon works best</small></div>
+        <div class="card"><div style="font-size:28px">🌾</div><strong>Cereal</strong><br><small>Your favorite variety</small></div>
+        <div class="card"><div style="font-size:28px">🥛</div><strong>Milk</strong><br><small>Cold & fresh</small></div>
+      </div>
+      <p class="p" style="color:#00b894; font-weight:800">Pro tip: prep first to prevent sog!</p>
+    </section>
+
+    <section class="stage" id="s4">
+      <h2 class="h1">Step 2: Add the Cereal</h2>
+      <p class="p">Pour slowly and steadily. Aim for about <strong>2/3 full</strong> so there’s room for milk.</p>
+      <div class="big pour" id="pourCereal" style="opacity:1">🌾➡️🥣</div>
+      <div style="margin-top:6px">
+        <button class="btn alt" id="replayCereal">Watch the Pour Again 🌾</button>
+      </div>
+    </section>
+
+    <section class="stage" id="s5">
+      <h2 class="h1">🤔 The Great Debate</h2>
+      <p class="p"><strong>Which do you add first?</strong></p>
+      <div class="choices">
+        <button class="btn" id="chooseCereal">🌾 Cereal First!</button>
+        <button class="btn warn" id="chooseMilk">🥛 Milk First!</button>
+      </div>
+      <div class="note">Choose wisely… your breakfast reputation depends on it.</div>
+    </section>
+
+    <section class="stage" id="s6a">
+      <h2 class="h1">🎉 Excellent Choice!</h2>
+      <div class="big" style="animation:celebrate 1s ease-in-out infinite alternate">🌾🥣</div>
+      <div class="q" style="text-align:left">
+        <strong>You chose: Cereal First</strong><br><br>
+        Benefits:
+        <ul style="margin:10px 0 0 16px">
+          <li>Better cereal‑to‑milk control</li>
+          <li>Less splashing</li>
+          <li>Crunch lasts longer</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="stage" id="s6b">
+      <h2 class="h1">😱 Bold Choice!</h2>
+      <div class="big">🥛❓</div>
+      <div class="q" style="text-align:left">
+        <strong>You chose: Milk First</strong><br><br>
+        Watch‑outs:
+        <ul style="margin:10px 0 0 16px">
+          <li>Harder to judge amounts</li>
+          <li>More splash risk</li>
+          <li>Uneven cereal distribution</li>
+        </ul>
+      </div>
+      <div class="note">Breakfast rebels have their place too—let’s keep going!</div>
+    </section>
+
+    <section class="stage" id="s7">
+      <h2 class="h1">Step 3: Add the Milk</h2>
+      <p class="p">Pour milk <strong>around the edges</strong> to reduce splash and preserve crunch.</p>
+      <div class="big pour" id="pourMilk" style="opacity:1">🥛➡️🥣</div>
+      <p class="p"><strong>Target level:</strong> just enough to <em>barely cover</em> the cereal.</p>
+      <div style="margin-top:6px">
+        <button class="btn" id="replayMilk">Pour the Milk Again 🥛</button>
+      </div>
+    </section>
+
+    <section class="stage" id="s8">
+      <h2 class="h1">Step 4: Creative Toppings</h2>
+      <p class="p">Optional, but delicious:</p>
+      <div class="grid">
+        <div class="card"><div style="font-size:28px">🍌</div><strong>Bananas</strong><br><small>Classic & nutritious</small></div>
+        <div class="card"><div style="font-size:28px">🍓</div><strong>Berries</strong><br><small>Burst of flavor</small></div>
+        <div class="card"><div style="font-size:28px">🥜</div><strong>Nuts</strong><br><small>Extra crunch</small></div>
+        <div class="card"><div style="font-size:28px">🍯</div><strong>Honey</strong><br><small>Natural sweetness</small></div>
+      </div>
+    </section>
+
+    <!-- Quiz 1 -->
+    <section class="stage" id="s9">
+      <h2 class="h1">🧠 Knowledge Check (1/3)</h2>
+      <div class="q">
+        <div><strong>What’s the recommended order?</strong></div>
+        <div class="opts">
+          <div class="opt" data-correct="false">Milk, then cereal, then bowl</div>
+          <div class="opt" data-correct="true">Bowl, cereal, then milk</div>
+          <div class="opt" data-correct="false">Cereal, milk, then bowl</div>
+          <div class="opt" data-correct="false">It doesn’t matter at all</div>
+        </div>
+        <div class="fb" id="fb1"></div>
+      </div>
+    </section>
+
+    <!-- Quiz 2 -->
+    <section class="stage" id="s10">
+      <h2 class="h1">🧠 Knowledge Check (2/3)</h2>
+      <div class="q">
+        <div><strong>Why pour milk around the edges?</strong></div>
+        <div class="opts">
+          <div class="opt" data-correct="false">It looks more professional</div>
+          <div class="opt" data-correct="true">Prevents splashing & keeps cereal crunchy</div>
+          <div class="opt" data-correct="false">It makes the milk taste better</div>
+          <div class="opt" data-correct="false">It’s just a tradition</div>
+        </div>
+        <div class="fb" id="fb2"></div>
+      </div>
+    </section>
+
+    <!-- Quiz 3 -->
+    <section class="stage" id="s11">
+      <h2 class="h1">🧠 Knowledge Check (3/3)</h2>
+      <div class="q">
+        <div><strong>Ideal milk level?</strong></div>
+        <div class="opts">
+          <div class="opt" data-correct="false">Fill to the very top</div>
+          <div class="opt" data-correct="true">Just enough to barely cover the cereal</div>
+          <div class="opt" data-correct="false">Half the bowl should be milk</div>
+          <div class="opt" data-correct="false">Use as little milk as possible</div>
+        </div>
+        <div class="fb" id="fb3"></div>
+      </div>
+    </section>
+
+    <!-- Complete -->
+    <section class="stage" id="s12">
+      <div class="big" style="animation:celebrate 1s ease-in-out infinite alternate">🥣✨🏆</div>
+      <h2 class="h1">🎉 Congratulations!</h2>
+      <p class="p" id="scoreText">
+        You’ve completed Breakfast Basics. Your breakfast game will never be the same!
+      </p>
+      <div class="return" style="margin-top:16px">
+        <a class="btn alt" href="index.html">⬅️ Return to Portfolio</a>
+        <button class="btn" id="again">🔄 Take Again</button>
+      </div>
+    </section>
+
+    <!-- Navigation (hidden on first screen) -->
+    <div class="nav" id="nav">
+      <button class="btn" id="prev">⬅️ Back</button>
+      <button class="btn" id="next">Next ➡️</button>
     </div>
   </div>
 
 <script>
-  // State
-  let cur = 1, total = 12, score = 0;
-  let branched = false; // whether we showed 6a/6b
-
+(function(){
+  const total = 12;
+  let cur = 1, score = 0;
   const byId = id => document.getElementById(id);
-  const show = (id) => document.querySelectorAll('.stage').forEach(s=>{
-    s.classList.toggle('active', s.id===id);
-  });
-
-  const updateMeta = () => {
-    byId('meta').textContent = `${cur} / ${total}`;
+  const show = n => {
+    document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
+    byId('s'+n).classList.add('active');
+    cur = n;
+    // progress + number
     byId('progress').style.width = (cur/total*100)+'%';
+    byId('num').textContent = `${cur} / ${total}`;
+
+    // navigation visibility rules
+    const nav = byId('nav');
+    const prev = byId('prev');
+    const next = byId('next');
+
+    if(cur===1){
+      nav.style.display='none'; // Start screen: only the Start button
+    } else {
+      nav.style.display='flex';
+      // default buttons
+      prev.style.display = (cur>1) ? 'inline-flex' : 'none';
+      next.style.display = 'inline-flex';
+      // special cases disable next (choice & quizzes)
+      if([5,9,10,11,12].includes(cur)) next.style.display='none';
+    }
   };
 
-  const go = n => {
-    cur = Math.max(1, Math.min(total, n));
-    show('s'+cur);
-    updateMeta();
-    // Hide/show course nav
-    byId('navBar').classList.toggle('hidden', cur===1 || cur===12);
+  // Start
+  byId('startBtn').addEventListener('click', ()=>show(2));
+
+  // Core nav
+  byId('prev').addEventListener('click', ()=>{ if(cur>1) show(cur-1); });
+  byId('next').addEventListener('click', ()=>{ if(cur<total) show(cur+1); });
+
+  // Replays
+  const replay = (id) => {
+    const el = byId(id);
+    el.style.animation='none'; el.style.opacity='0';
+    setTimeout(()=>{ el.style.animation='pour 2s ease-in-out'; el.style.opacity='1'; },50);
   };
+  byId('replayCereal').addEventListener('click', ()=>replay('pourCereal'));
+  byId('replayMilk').addEventListener('click', ()=>replay('pourMilk'));
 
-  // Start button only on slide 1
-  byId('startBtn').addEventListener('click', ()=>{
-    byId('startWrap').classList.add('hidden');
-    byId('navBar').classList.remove('hidden');
-    go(2);
+  // Debate branching
+  byId('chooseCereal').addEventListener('click', ()=>{ show(6); byId('s6a').classList.add('active'); });
+  byId('chooseMilk').addEventListener('click',   ()=>{ show(6); byId('s6b').classList.add('active'); });
+
+  // After 6a or 6b, allow next
+  // We’ll listen for entering slide 6, then enable a temporary next
+  const observer = new MutationObserver(()=>{
+    if(cur===6){
+      const nav = byId('nav');
+      const next = byId('next');
+      nav.style.display='flex';
+      next.style.display='inline-flex';
+      next.onclick = ()=>show(7);
+    }
   });
+  observer.observe(byId('app'), {subtree:true, attributes:true, attributeFilter:['class']});
 
-  // Pour animations
-  const playPour = (elId) => {
-    const el = byId(elId);
-    el.style.opacity = 0;
-    el.style.animation = 'none';
-    requestAnimationFrame(()=>{
-      requestAnimationFrame(()=>{
-        el.style.animation = 'pour 1.9s ease-in-out forwards';
-      });
-    });
-  };
-  byId('btnPourCereal').addEventListener('click', ()=>playPour('pourCereal'));
-  byId('btnPourMilk').addEventListener('click', ()=>playPour('pourMilk'));
-
-  // Debate choices
-  byId('chooseCereal').addEventListener('click', ()=>{
-    // jump to 6a then allow next to proceed to 7
-    cur = 6; branched = true;
-    show('s6a'); updateMeta(); byId('navBar').classList.remove('hidden');
-  });
-  byId('chooseMilk').addEventListener('click', ()=>{
-    cur = 6; branched = true;
-    show('s6b'); updateMeta(); byId('navBar').classList.remove('hidden');
-  });
-
-  // Quiz helpers
-  function wireQuiz(stageId, fbId){
+  // Quiz wiring (no pre-highlighting)
+  function wireQuiz(stageId, fbId, nextTo){
     const stage = byId(stageId);
     const fb = byId(fbId);
     stage.querySelectorAll('.opt').forEach(opt=>{
       opt.addEventListener('click', ()=>{
-        // lock options
+        // lock all options
         stage.querySelectorAll('.opt').forEach(o=>{
           o.style.pointerEvents='none';
-          if (o.classList.contains('correct')) {
-            o.classList.add('correct');
-          }
+          o.style.opacity='0.75';
         });
-        if (opt.classList.contains('correct')) {
-          fb.className='fb ok'; fb.style.display='block'; fb.textContent='Correct!';
+        const isCorrect = opt.getAttribute('data-correct') === 'true';
+        if(isCorrect){
+          opt.classList.add('correct'); // add green only after selection
+          fb.className='fb ok';
+          fb.textContent='Correct!';
           score++;
-        } else {
-          opt.classList.add('incorrect');
-          fb.className='fb no'; fb.style.display='block'; fb.textContent='Not quite—check the tip above.';
+        }else{
+          opt.classList.add('incorrect'); // add red only after selection
+          fb.className='fb no';
+          fb.textContent='Not quite—check the tip above.';
         }
+        fb.style.display='block';
+
+        // reveal Next button for this step
+        const nav = byId('nav');
+        const next = byId('next');
+        nav.style.display='flex';
+        next.style.display='inline-flex';
+        next.onclick = ()=>show(nextTo);
       }, {once:true});
     });
   }
-  wireQuiz('s9','fb1');
-  wireQuiz('s10','fb2');
-  wireQuiz('s11','fb3');
+  wireQuiz('s9','fb1',10);
+  wireQuiz('s10','fb2',11);
+  wireQuiz('s11','fb3',12);
 
-  // Next/Prev navigation
-  byId('next').addEventListener('click', ()=>{
-    // If we are at stage 6 and branched, go to 7
-    if (cur===6 && branched) { cur = 7; go(cur); return; }
-    if (cur<total) go(cur+1);
-    if (cur===12){
-      byId('scoreOut').textContent = `${score}/3`;
-    }
-  });
-  byId('prev').addEventListener('click', ()=>{
-    if (cur>1) {
-      // If returning from 7 to 6, show a consistent 6a screen
-      if (cur===7 && branched){ show('s6a'); cur=6; updateMeta(); return; }
-      go(cur-1);
-    }
-  });
-
-  // Restart
-  byId('restart').addEventListener('click', ()=>{
+  // Finish
+  byId('again').addEventListener('click', ()=>{
+    score = 0;
     // reset quiz states
     document.querySelectorAll('.opt').forEach(o=>{
       o.classList.remove('correct','incorrect');
       o.style.pointerEvents='auto';
+      o.style.opacity='1';
     });
-    document.querySelectorAll('.fb').forEach(f=>{f.style.display='none';});
-    score = 0; branched=false;
-    byId('startWrap').classList.remove('hidden');
-    byId('navBar').classList.add('hidden');
-    go(1);
+    document.querySelectorAll('.fb').forEach(f=>{
+      f.style.display='none'; f.className='fb';
+    });
+    show(1);
   });
 
-  // Init
-  updateMeta(); // 1/12
+  // Initialize to slide 1
+  show(1);
+})();
 </script>
 </body>
 </html>
