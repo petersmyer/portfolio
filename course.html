@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peter Smyer — Instructional Design Showcase</title>
+  <style>
+    /* Reset and base styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f7fafc;
+    }
+
+    /* Layout */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    .grid { display: grid; gap: 2rem; }
+    @media (min-width: 768px) {
+      .md-grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .md-grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* Typography */
+    .text-center { text-align: center; }
+    .text-5xl { font-size: 3rem; font-weight: 700; }
+    .text-4xl { font-size: 2.25rem; font-weight: 700; }
+    .text-3xl { font-size: 1.875rem; font-weight: 700; }
+    .text-2xl { font-size: 1.5rem; font-weight: 600; }
+    .text-xl { font-size: 1.25rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-6xl { font-size: 3.75rem; }
+
+    /* Colors */
+    .text-white { color: white; }
+    .text-gray-800 { color: #2d3748; }
+    .text-gray-600 { color: #718096; }
+    .text-gray-400 { color: #a0aec0; }
+    .bg-white { background-color: white; }
+    .bg-gray-100 { background-color: #f7fafc; }
+    .bg-gray-800 { background-color: #2d3748; }
+    .bg-blue-600 { background-color: #3182ce; }
+    .bg-green-600 { background-color: #38a169; }
+    .bg-indigo-600 { background-color: #5a67d8; }
+
+    /* Spacing */
+    .py-20 { padding: 5rem 0; }
+    .py-16 { padding: 4rem 0; }
+    .p-8 { padding: 2rem; }
+    .p-12 { padding: 3rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mb-12 { margin-bottom: 3rem; }
+    .mt-8 { margin-top: 2rem; }
+
+    /* Borders & shapes */
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .border-t { border-top: 1px solid #718096; }
+
+    /* Header gradient */
+    .cereal-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* Project gradients */
+    .blue-gradient {
+      background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
+    }
+    .green-gradient {
+      background: linear-gradient(135deg, #f0fff4 0%, #d6f5d6 100%);
+    }
+
+    /* Interactive */
+    .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .hover-lift:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    .cartoon-button {
+      border: 3px solid #2c3e50;
+      box-shadow: 4px 4px 0px #2c3e50;
+      transition: all 0.2s ease;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .cartoon-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0px #2c3e50;
+    }
+
+    /* Floating animation */
+    .floating-element { animation: float 3s ease-in-out infinite; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Footer */
+    footer .hover-lift { background: #4a5568; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="cereal-gradient text-white py-20">
+    <div class="container text-center">
+      <div class="mb-6">
+        <!-- Logo -->
+        <div class="text-6xl mb-4 floating-element">🌀PS</div>
+        <h1 class="text-5xl mb-4">Peter Smyer</h1>
+        <h2 class="text-2xl font-light mb-6">Instructional Design Showcase</h2>
+      </div>
+      <div class="rounded-lg p-6 inline-block" style="background-color: rgba(255,255,255,0.2); backdrop-filter: blur(4px);">
+        <p class="text-xl font-medium">
+          Instructional Designer • Learning Experience Creator • Educational Problem Solver
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Me -->
+  <section class="py-16 bg-white">
+    <div class="container max-w-4xl">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl text-gray-800 mb-4">About Me</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+      </div>
+      <div class="bg-gray-100 rounded-xl p-8 hover-lift">
+        <p class="text-lg text-gray-700 leading-relaxed mb-4">
+          With over 6 years of experience in Learning & Development, I specialize in creating engaging, effective instructional experiences that connect with learners and drive meaningful results.
+        </p>
+        <p class="text-lg text-gray-700 leading-relaxed mb-4">
+          My expertise spans multimedia production, adult learning theories, and transforming complex concepts into clear, actionable learning experiences. Whether it's eLearning modules, job aids, or comprehensive training programs, I bring creativity and pedagogy to every project.
+        </p>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          When I'm not designing, you'll find me exploring educational technology trends and experimenting with innovative ways to make learning more engaging.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Credentials -->
+  <section class="py-16 bg-gray-100">
+    <div class="container max-w-6xl text-center">
+      <h2 class="text-4xl text-gray-800 mb-4">Credentials & Skills</h2>
+      <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+      <p class="text-xl text-gray-600 mb-12">Tools and expertise that power learning experiences</p>
+      <div class="grid md-grid-3">
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4">🛠️</div>
+          <h3 class="text-xl font-semibold mb-4">Technical Tools</h3>
+          <ul>
+            <li>Articulate 360</li><li>Canva</li><li>Adobe Suite</li><li>LearnUpon</li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4">📚</div>
+          <h3 class="text-xl font-semibold mb-4">Design Methods</h3>
+          <ul>
+            <li>ADDIE</li><li>Adult Learning</li><li>Bloom’s Taxonomy</li><li>Kirkpatrick</li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-xl p-6 hover-lift">
+          <div class="text-3xl mb-4">📊</div>
+          <h3 class="text-xl font-semibold mb-4">Strategy</h3>
+          <ul>
+            <li>Needs Assessment</li><li>Objectives</li><li>Data Analysis</li><li>Performance Metrics</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="py-16 bg-white">
+    <div class="container max-w-6xl text-center">
+      <h2 class="text-4xl text-gray-800 mb-4">Portfolio Projects</h2>
+      <div class="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+      <p class="text-xl text-gray-600 mb-12">Featured work that demonstrates my approach to instructional design</p>
+      <div class="grid md-grid-2">
+        <!-- eCourse -->
+        <div class="blue-gradient rounded-xl p-8 hover-lift">
+          <div class="text-5xl mb-6">🥣</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Interactive eCourse</h3>
+          <h4 class="text-xl font-semibold text-blue-600 mb-4">How to Make a Bowl of Cereal</h4>
+          <p class="text-gray-700 mb-6">
+            A self-paced interactive course that breaks down the seemingly simple task of cereal prep into fun, engaging steps.
+          </p>
+          <a class="cartoon-button bg-blue-600 text-white py-3 px-6 rounded-lg w-full"
+             href="course.html" target="_blank">
+            Launch Course 🚀
+          </a>
+        </div>
+        <!-- Job Aid -->
+        <div class="green-gradient rounded-xl p-8 hover-lift">
+          <div class="text-5xl mb-6">📋</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Job Aid</h3>
+          <h4 class="text-xl font-semibold text-green-600 mb-4">Quick Guide: Bowl of Cereal</h4>
+          <p class="text-gray-700 mb-6">
+            A concise, visually appealing reference guide designed for just-in-time learning.
+          </p>
+          <a class="cartoon-button bg-green-600 text-white py-3 px-6 rounded-lg w-full"
+             href="job-aid.html" target="_blank">
+            View Job Aid 📋
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resume -->
+  <section class="py-16 bg-gray-100">
+    <div class="container max-w-4xl text-center">
+      <div class="bg-white rounded-xl p-12 hover-lift">
+        <div class="text-6xl mb-6">📄</div>
+        <h2 class="text-3xl text-gray-800 mb-4">Ready to Learn More?</h2>
+        <p class="text-xl text-gray-600 mb-8">
+          Download my full resume to see the complete picture of my experience, education, and achievements.
+        </p>
+        <a class="cartoon-button bg-indigo-600 text-white py-4 px-8 rounded-lg text-lg inline-flex items-center gap-2"
+           href="resume.pdf" download>
+          <span>Download My Resume</span><span>⬇️</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container max-w-4xl text-center">
+      <h3 class="text-2xl font-bold mb-4">Let's Connect!</h3>
+      <p class="text-gray-300 mb-6">Ready to discuss your next learning project? I’m always up for a good conversation about instructional design.</p>
+      <div class="grid md-grid-3">
+        <div class="rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2">📧</div>
+          <h4>Email</h4><p class="text-gray-300">peter.smyer@email.com</p>
+        </div>
+        <div class="rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2">📱</div>
+          <h4>Phone</h4><p class="text-gray-300">480-570-3459</p>
+        </div>
+        <div class="rounded-lg p-6 hover-lift">
+          <div class="text-2xl mb-2">💼</div>
+          <h4>LinkedIn</h4><p class="text-gray-300">linkedin.com/in/petersmyer</p>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t text-gray-400">
+        © 2024 Peter Smyer. Designed with passion for learning!
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
