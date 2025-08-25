@@ -9,7 +9,6 @@
       --indigo1: #667eea;
       --indigo2: #764ba2;
       --ink: #2d3748;
-      --paper: #ffffff;
       --gray: #f7fafc;
       --blue: #3182ce;
       --green: #38a169;
@@ -23,36 +22,41 @@
     }
     header {
       background: linear-gradient(135deg,var(--indigo1),var(--indigo2));
-      color:#fff; text-align:center; padding:4rem 1rem; position:relative;
+      color:#fff; text-align:center; padding:3rem 1rem; position:relative;
     }
     header .logo {
       position:absolute; top:16px; left:16px; display:flex; align-items:center; gap:8px; text-decoration:none;
     }
-    header .logo svg { width:44px; height:44px; }
-    header h1 { font-size:3rem; font-weight:700; margin-bottom:.5rem; }
-    header h2 { font-weight:400; }
-    .section { padding:4rem 1rem; }
-    .section h2 { text-align:center; font-size:2rem; margin-bottom:1rem; }
-    .line { width:80px; height:4px; background:var(--blue); margin:0 auto 2rem; }
-    .grid2 {
-      display:grid; gap:2rem;
-    }
+    header .logo svg { width:40px; height:40px; }
+    header h1 { font-size:2.5rem; font-weight:700; margin-bottom:.5rem; }
+    header h2 { font-weight:400; font-size:1.25rem; }
+    .section { padding:3rem 1rem; }
+    .section h2 { text-align:center; font-size:1.75rem; margin-bottom:.75rem; }
+    .line { width:60px; height:3px; background:var(--blue); margin:0 auto 1.5rem; }
+    .grid2 { display:grid; gap:1.25rem; }
     @media(min-width:768px){
       .grid2 { grid-template-columns:repeat(2,1fr); }
     }
     .card {
-      background:#fff; border-radius:12px; padding:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,.1);
-      transition:.3s; 
+      background:#fff; border-radius:10px; padding:1rem 1.25rem;
+      box-shadow:0 3px 8px rgba(0,0,0,.08);
+      font-size:.95rem;
+      transition:.3s;
     }
-    .card:hover { transform:translateY(-4px); }
+    .card h3 { margin-bottom:.5rem; font-size:1.1rem; }
+    .card p { margin-bottom:.5rem; }
+    .card:hover { transform:translateY(-3px); }
+    ul { margin-left:1rem; }
+    li { margin-bottom:.25rem; }
     .btn {
       display:inline-block; background:var(--blue); color:#fff; border:none;
-      padding:.75rem 1.5rem; border-radius:8px; font-weight:600; cursor:pointer;
-      text-decoration:none; margin-top:1rem;
+      padding:.5rem 1rem; border-radius:6px; font-weight:600; cursor:pointer;
+      text-decoration:none; font-size:.9rem;
     }
     .btn:hover { background:#2c5282; }
     footer {
-      background:#2d3748; color:#e2e8f0; text-align:center; padding:2rem 1rem;
+      background:#2d3748; color:#e2e8f0; text-align:center; padding:1.5rem 1rem;
+      font-size:.9rem;
     }
     footer a { color:#fff; text-decoration:none; }
   </style>
@@ -87,15 +91,15 @@
     <div class="grid2">
       <div class="card">
         <h3>About Me</h3>
-        <p>With over 6 years in Learning & Development, I create engaging, effective instructional experiences that connect with learners and drive results. I transform complex concepts into clear, actionable learning—whether that’s eLearning modules, job aids, or full training programs.</p>
-        <p>Outside of work, I stay current on ed-tech trends and explore creative ways to make learning more effective.</p>
+        <p>I have 6+ years of Learning & Development experience, crafting engaging instructional solutions that drive real results. My specialty is simplifying complexity into clear, actionable learning.</p>
+        <p>When I’m not designing, I explore ed-tech innovations and creative ways to make learning fun and effective.</p>
       </div>
       <div class="card">
         <h3>Credentials & Tools</h3>
         <ul>
           <li><strong>Tools:</strong> Articulate 360, Canva, Adobe Suite, LearnUpon</li>
-          <li><strong>Methodologies:</strong> ADDIE, Adult Learning Theory, Bloom’s Taxonomy, Kirkpatrick</li>
-          <li><strong>Strengths:</strong> Needs analysis, data-driven strategy, multimedia design</li>
+          <li><strong>Methods:</strong> ADDIE, Adult Learning Theory, Bloom’s Taxonomy, Kirkpatrick</li>
+          <li><strong>Strengths:</strong> Needs analysis, multimedia design, strategy</li>
         </ul>
       </div>
     </div>
@@ -108,12 +112,12 @@
     <div class="grid2">
       <div class="card">
         <h3>Interactive eCourse</h3>
-        <p>"How to Make a Bowl of Cereal" — a playful, step-by-step interactive course featuring branching scenarios and knowledge checks.</p>
+        <p>A playful step-by-step course: <em>"How to Make a Bowl of Cereal"</em>, featuring branching choices and a quiz.</p>
         <a href="course.html" class="btn">Launch Course 🚀</a>
       </div>
       <div class="card">
         <h3>Job Aid</h3>
-        <p>A concise, visual quick-reference for cereal prep, viewable online for just-in-time learning.</p>
+        <p>A one-page quick reference for cereal prep, viewable online for just-in-time learning.</p>
         <a href="job-aid.html" class="btn" style="background:var(--green)">View Job Aid 📋</a>
       </div>
     </div>
@@ -123,8 +127,8 @@
   <section class="section">
     <h2>Resume</h2>
     <div class="line"></div>
-    <div class="card" style="text-align:center">
-      <p>Download my full resume to see experience, education, and achievements.</p>
+    <div class="card" style="text-align:center; max-width:600px; margin:0 auto;">
+      <p>Download my resume for experience, education, and achievements.</p>
       <a href="resume.pdf" class="btn" download>⬇️ Download Resume</a>
     </div>
   </section>
@@ -133,7 +137,7 @@
     <p>📧 peter.smyer@email.com | 📱 480-570-3459 | 
       <a href="https://linkedin.com/in/petersmyer" target="_blank">LinkedIn</a>
     </p>
-    <p style="margin-top:.5rem;font-size:13px">© 2025 Peter Smyer. Designed with passion for learning.</p>
+    <p style="margin-top:.5rem;font-size:12px">© 2025 Peter Smyer. Designed with passion for learning.</p>
   </footer>
 </body>
 </html>
