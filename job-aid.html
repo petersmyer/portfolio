@@ -1,83 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Job Aid — How to Make a Bowl of Cereal</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 50%, #74b9ff 100%);
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .job-aid {
-      background: white;
-      border-radius: 20px;
-      max-width: 700px;
-      padding: 40px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      border: 4px solid #2d3436;
-    }
-    h1 {
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 0px #fdcb6e;
-    }
-    h2 {
-      font-size: 1.5rem;
-      margin-top: 20px;
-      color: #2d3436;
-    }
-    ul, ol {
-      margin: 10px 0 20px 20px;
-      line-height: 1.6;
-    }
-    .emoji { font-size: 1.3rem; margin-right: 6px; }
-    .tip {
-      background: #f0fff4;
-      border: 2px solid #38a169;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #276749;
-    }
-    @media (max-width: 600px) {
-      .job-aid { padding: 20px; }
-      h1 { font-size: 1.5rem; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Breakfast Basics – Cereal Job Aid</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:linear-gradient(135deg,#ffeaa7 0%,#fab1a0 50%,#74b9ff 100%);
+    color:#2d3436; min-height:100vh;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .wrap{width:100%; max-width:900px}
+  .card{
+    background:#fff; border-radius:20px; border:4px solid #2d3436;
+    box-shadow:0 20px 40px rgba(0,0,0,.1); overflow:hidden;
+  }
+  .header{
+    padding:28px 24px; text-align:center;
+    background:linear-gradient(135deg,#ebf8ff 0%,#e6fffa 100%);
+    border-bottom:4px solid #2d3436;
+  }
+  .title{font-size:2rem; font-weight:800; text-shadow:2px 2px 0 #fdcb6e}
+  .subtitle{color:#636e72; margin-top:6px}
+  .btnbar{
+    display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:14px;
+  }
+  .btn{
+    background:linear-gradient(135deg,#00b894,#00cec9); color:#fff;
+    border:3px solid #2d3436; border-radius:50px; padding:12px 18px;
+    font-weight:800; box-shadow:4px 4px 0 #2d3436; cursor:pointer;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:6px 6px 0 #2d3436}
+  .btn:active{transform:translateY(2px); box-shadow:2px 2px 0 #2d3436}
+  .btn.alt{background:linear-gradient(135deg,#5a67d8,#667eea)}
+  .section{padding:24px}
+  .section + .section{border-top:3px dashed #e5e7eb}
+  .grid{display:grid; gap:16px}
+  @media(min-width:768px){.grid.cols-2{grid-template-columns:repeat(2,1fr)}}
+  .panel{
+    background:#f8f9fa; border:3px solid #2d3436; border-radius:16px; padding:18px;
+  }
+  .panel h3{font-size:1.1rem; margin-bottom:8px}
+  .row{display:flex; align-items:flex-start; gap:10px; margin:8px 0}
+  .badge{
+    display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700;
+    border:2px solid #2d3436; background:#fffff0; margin-right:8px;
+  }
+  .checklist li{margin:8px 0; display:flex; gap:8px; align-items:flex-start}
+  .emoji{font-size:1.5rem}
+  .note{background:#fff7ed; border:2px dashed #e07a5f; border-radius:12px; padding:12px; font-weight:700}
+  .footer{padding:18px; text-align:center; color:#636e72}
+  @media print{.btnbar,.footer a{display:none!important}}
+</style>
 </head>
 <body>
-  <div class="job-aid">
-    <h1>🥣 Quick Guide: How to Make a Bowl of Cereal</h1>
+  <main class="wrap">
+    <article class="card" aria-labelledby="jobAidTitle">
+      <header class="header">
+        <div class="title" id="jobAidTitle">🥣 Breakfast Basics — Quick Job Aid</div>
+        <div class="subtitle">A one-page guide to perfect cereal, every time.</div>
+        <div class="btnbar" role="toolbar" aria-label="Job Aid actions">
+          <a class="btn" href="index.html">⟵ Back to Portfolio</a>
+          <a class="btn alt" href="course.html">🚀 Launch Interactive Course</a>
+        </div>
+      </header>
 
-    <h2>Essential Tools</h2>
-    <ul>
-      <li><span class="emoji">🥣</span>Medium to large bowl</li>
-      <li><span class="emoji">🥄</span>Spoon</li>
-      <li><span class="emoji">🌾</span>Your favorite cereal</li>
-      <li><span class="emoji">🥛</span>Cold, fresh milk</li>
-    </ul>
+      <!-- Essentials -->
+      <section class="section">
+        <div class="grid cols-2">
+          <div class="panel">
+            <h3>🔧 Essentials</h3>
+            <div class="row"><span class="emoji">🥣</span><div><strong>Bowl</strong><br/><small>Medium–large works best</small></div></div>
+            <div class="row"><span class="emoji">🥄</span><div><strong>Spoon</strong><br/><small>Soup spoon preferred</small></div></div>
+            <div class="row"><span class="emoji">🌾</span><div><strong>Cereal</strong><br/><small>Your favorite variety</small></div></div>
+            <div class="row"><span class="emoji">🥛</span><div><strong>Milk</strong><br/><small>Cold & fresh</small></div></div>
+          </div>
 
-    <h2>Step-by-Step Process</h2>
-    <ol>
-      <li><strong>Gather Tools:</strong> Have everything ready before you start.</li>
-      <li><strong>Add Cereal:</strong> Fill bowl about 2/3 full — leaves room for milk.</li>
-      <li><strong>Add Milk:</strong> Pour slowly around edges until cereal is just covered.</li>
-      <li><strong>Optional Toppings:</strong> Bananas, berries, nuts, or honey.</li>
-      <li><strong>Enjoy Immediately:</strong> Don’t let it get soggy!</li>
-    </ol>
+          <div class="panel">
+            <h3>🎯 Objectives</h3>
+            <ul class="checklist">
+              <li><span class="emoji">✅</span>Follow the proper prep sequence</li>
+              <li><span class="emoji">✅</span>Hit the ideal cereal-to-milk ratio</li>
+              <li><span class="emoji">✅</span>Keep cereal crunchy longer</li>
+              <li><span class="emoji">✅</span>Add optional toppings like a pro</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-    <div class="tip">
-      ✅ Pro Tip: Cold milk keeps cereal crunchy longer. Always add cereal first for the perfect ratio!
-    </div>
-  </div>
+      <!-- Steps -->
+      <section class="section">
+        <h3 style="margin-bottom:10px">🪜 Steps at a Glance</h3>
+        <div class="panel">
+          <div class="row"><span class="badge">1</span><div><strong>Gather tools</strong> — bowl, spoon, cereal, milk.</div></div>
+          <div class="row"><span class="badge">2</span><div><strong>Add cereal</strong> — fill the bowl about <em>2/3 full</em>.</div></div>
+          <div class="row"><span class="badge">3</span><div><strong>Add milk</strong> — pour slowly around the edges. <div class="note" style="margin-top:8px">Ideal: just enough to cover the cereal.</div></div></div>
+          <div class="row"><span class="badge">4</span><div><strong>Optional toppings</strong> — 🍌 bananas, 🍓 berries, 🥜 nuts, 🍯 honey.</div></div>
+          <div class="row"><span class="badge">5</span><div><strong>Enjoy immediately</strong> — maximize crunch, minimize sog.</div></div>
+        </div>
+      </section>
+
+      <!-- The Great Debate + Tips -->
+      <section class="section">
+        <div class="grid cols-2">
+          <div class="panel">
+            <h3>🤔 The Great Debate</h3>
+            <p><strong>Which first?</strong></p>
+            <ul class="checklist">
+              <li><span class="emoji">🌾</span><strong>Cereal-first</strong> → best ratio control, less splash.</li>
+              <li><span class="emoji">🥛</span><strong>Milk-first</strong> → rebel energy… but tougher to judge.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>💡 Pro Tips</h3>
+            <ul class="checklist">
+              <li><span class="emoji">❄️</span>Colder milk = longer crunch</li>
+              <li><span class="emoji">🌀</span>Pour around the bowl’s edge</li>
+              <li><span class="emoji">➕</span>Start with less milk</li>
+              <li><span class="emoji">⏱️</span>Eat soon after pouring</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Ratios -->
+      <section class="section">
+        <div class="panel">
+          <h3>📏 Quick Ratios</h3>
+          <ul class="checklist">
+            <li><span class="emoji">🥣</span> Bowl 2/3 full of cereal</li>
+            <li><span class="emoji">🥛</span> Milk to just cover cereal surface</li>
+            <li><span class="emoji">🔁</span> Add milk in increments as you eat</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer">
+        Want the full experience? <a href="course.html" style="color:#2d3436;font-weight:700;text-decoration:underline">Take the interactive course</a>.
+      </div>
+    </article>
+  </main>
 </body>
 </html>
