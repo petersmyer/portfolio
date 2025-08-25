@@ -1,192 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Peter Smyer — Instructional Design Showcase</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --indigo1: #667eea;
+      --indigo2: #764ba2;
+      --ink: #2d3748;
+      --paper: #ffffff;
+      --gray: #f7fafc;
+      --blue: #3182ce;
+      --green: #38a169;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      background-color: #f7fafc;
+      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Ubuntu,Cantarell,sans-serif;
+      background: var(--gray);
+      color: var(--ink);
+      line-height:1.6;
     }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-    .text-center { text-align: center; }
-    .text-5xl { font-size: 3rem; font-weight: 700; }
-    .text-4xl { font-size: 2.25rem; font-weight: 700; }
-    .text-3xl { font-size: 1.875rem; font-weight: 700; }
-    .text-2xl { font-size: 1.5rem; font-weight: 600; }
-    .text-xl { font-size: 1.25rem; }
-    .text-lg { font-size: 1.125rem; }
-    .text-gray-800 { color: #2d3748; }
-    .text-gray-600 { color: #718096; }
-    .bg-white { background: white; }
-    .bg-gray-100 { background: #f7fafc; }
-    .bg-gray-800 { background: #2d3748; }
-    .bg-blue-600 { background: #3182ce; }
-    .bg-green-600 { background: #38a169; }
-    .bg-indigo-600 { background: #5a67d8; }
-    .rounded-xl { border-radius: 0.75rem; }
-    .p-8 { padding: 2rem; }
-    .p-12 { padding: 3rem; }
-    .py-16 { padding: 4rem 0; }
-    .py-20 { padding: 5rem 0; }
-    .mb-4 { margin-bottom: 1rem; }
-    .mb-6 { margin-bottom: 1.5rem; }
-    .mb-12 { margin-bottom: 3rem; }
-    .hover-lift {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    header {
+      background: linear-gradient(135deg,var(--indigo1),var(--indigo2));
+      color:#fff; text-align:center; padding:4rem 1rem; position:relative;
     }
-    .hover-lift:hover {
-      transform: translateY(-8px) rotate(-1deg);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    header .logo {
+      position:absolute; top:16px; left:16px; display:flex; align-items:center; gap:8px; text-decoration:none;
     }
-    .cartoon-button {
-      border: 3px solid #2c3e50;
-      box-shadow: 4px 4px 0px #2c3e50;
-      transition: all 0.2s ease;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
+    header .logo svg { width:44px; height:44px; }
+    header h1 { font-size:3rem; font-weight:700; margin-bottom:.5rem; }
+    header h2 { font-weight:400; }
+    .section { padding:4rem 1rem; }
+    .section h2 { text-align:center; font-size:2rem; margin-bottom:1rem; }
+    .line { width:80px; height:4px; background:var(--blue); margin:0 auto 2rem; }
+    .grid2 {
+      display:grid; gap:2rem;
     }
-    .cartoon-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0px #2c3e50;
+    @media(min-width:768px){
+      .grid2 { grid-template-columns:repeat(2,1fr); }
     }
-    .logo-ps {
-      font-size: 4rem;
-      font-family: "Brush Script MT", cursive;
-      font-weight: bold;
-      letter-spacing: -0.05em;
-      color: white;
-      display: inline-block;
-      padding: 0.5rem 1.2rem;
-      border: 3px solid white;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #3182ce, #5a67d8);
-      text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-      box-shadow: 6px 6px 0px rgba(0,0,0,0.25);
+    .card {
+      background:#fff; border-radius:12px; padding:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,.1);
+      transition:.3s; 
     }
-    .cereal-gradient {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .card:hover { transform:translateY(-4px); }
+    .btn {
+      display:inline-block; background:var(--blue); color:#fff; border:none;
+      padding:.75rem 1.5rem; border-radius:8px; font-weight:600; cursor:pointer;
+      text-decoration:none; margin-top:1rem;
     }
-    footer { margin-top: 2rem; }
+    .btn:hover { background:#2c5282; }
+    footer {
+      background:#2d3748; color:#e2e8f0; text-align:center; padding:2rem 1rem;
+    }
+    footer a { color:#fff; text-decoration:none; }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="cereal-gradient text-white py-20">
-    <div class="container text-center">
-      <div class="mb-6">
-        <div class="logo-ps mb-4">PS</div>
-        <h1 class="text-5xl mb-4">Peter Smyer</h1>
-        <h2 class="text-2xl">Instructional Design Showcase</h2>
-      </div>
-    </div>
+  <header>
+    <a class="logo" href="index.html">
+      <!-- PS cursive logo -->
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#667eea"/>
+            <stop offset="100%" stop-color="#764ba2"/>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="55" fill="#fff" stroke="#2d3436" stroke-width="4"/>
+        <path d="M35 85 Q38 40, 50 38 Q68 36, 70 50 Q72 62, 55 64 Q44 66, 39 60"
+              fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M80 40 Q64 32, 58 42 Q52 52, 72 56 Q92 60, 76 78 Q64 92, 48 84"
+              fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span style="font-weight:700;color:#fff;">PS</span>
+    </a>
+    <h1>Peter Smyer</h1>
+    <h2>Instructional Design Showcase</h2>
   </header>
 
-  <!-- About Me -->
-  <section class="py-16 bg-white">
-    <div class="container max-w-4xl">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl text-gray-800 mb-4">About Me</h2>
+  <!-- About + Skills -->
+  <section class="section">
+    <h2>About Me & Skills</h2>
+    <div class="line"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>About Me</h3>
+        <p>With over 6 years in Learning & Development, I create engaging, effective instructional experiences that connect with learners and drive results. I transform complex concepts into clear, actionable learning—whether that’s eLearning modules, job aids, or full training programs.</p>
+        <p>Outside of work, I stay current on ed-tech trends and explore creative ways to make learning more effective.</p>
       </div>
-      <div class="bg-gray-100 rounded-xl p-8 hover-lift">
-        <p class="text-xl text-gray-600 mb-4">
-          With over 6 years in Learning & Development and 3 years focused on Instructional Design, I specialize in building learning that blends creativity with adult learning science. 
-          My work spans new-hire programs, vendor training, collections enablement, and LMS administration.
-        </p>
-        <p class="text-xl text-gray-600 mb-4">
-          I bridge facilitation and design, mentor new IDs, and create scalable frameworks for vendor sites. Outside of work, I write creatively, explore educational technology trends, and keep up with my three kids.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills & Systems -->
-  <section class="py-16 bg-gray-100">
-    <div class="container max-w-6xl">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl text-gray-800 mb-4">Skills & Systems</h2>
-      </div>
-      <div class="grid md-grid-3">
-        <div class="bg-white rounded-xl p-8 hover-lift">
-          <h3 class="text-2xl mb-4">Instructional Design</h3>
-          <ul>
-            <li>ADDIE Model</li>
-            <li>Adult Learning Theories</li>
-            <li>Bloom's Taxonomy</li>
-            <li>Kirkpatrick Model</li>
-          </ul>
-        </div>
-        <div class="bg-white rounded-xl p-8 hover-lift">
-          <h3 class="text-2xl mb-4">Tools</h3>
-          <ul>
-            <li>Articulate 360</li>
-            <li>Adobe Creative Suite</li>
-            <li>Canva</li>
-            <li>LearnUpon LMS</li>
-          </ul>
-        </div>
-        <div class="bg-white rounded-xl p-8 hover-lift">
-          <h3 class="text-2xl mb-4">Analysis & Strategy</h3>
-          <ul>
-            <li>Needs Assessment</li>
-            <li>Data Analysis</li>
-            <li>Performance Metrics</li>
-            <li>Learning Objectives</li>
-          </ul>
-        </div>
+      <div class="card">
+        <h3>Credentials & Tools</h3>
+        <ul>
+          <li><strong>Tools:</strong> Articulate 360, Canva, Adobe Suite, LearnUpon</li>
+          <li><strong>Methodologies:</strong> ADDIE, Adult Learning Theory, Bloom’s Taxonomy, Kirkpatrick</li>
+          <li><strong>Strengths:</strong> Needs analysis, data-driven strategy, multimedia design</li>
+        </ul>
       </div>
     </div>
   </section>
 
   <!-- Portfolio -->
-  <section class="py-16 bg-white">
-    <div class="container max-w-6xl">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl text-gray-800 mb-4">Portfolio Projects</h2>
+  <section class="section" style="background:#f0f4f8">
+    <h2>Portfolio Projects</h2>
+    <div class="line"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Interactive eCourse</h3>
+        <p>"How to Make a Bowl of Cereal" — a playful, step-by-step interactive course featuring branching scenarios and knowledge checks.</p>
+        <a href="course.html" class="btn">Launch Course 🚀</a>
       </div>
-      <div class="grid md-grid-2">
-        <div class="bg-white rounded-xl p-8 hover-lift">
-          <h3 class="text-2xl mb-4">Interactive eCourse</h3>
-          <p class="text-gray-600 mb-4">"How to Make a Bowl of Cereal" — A fun, step-by-step interactive learning module with knowledge checks and branching choices.</p>
-          <button class="cartoon-button bg-blue-600 text-white py-3 px-6 rounded-lg w-full" onclick="window.location.href='course.html'">
-            Launch Course 🚀
-          </button>
-        </div>
-        <div class="bg-white rounded-xl p-8 hover-lift">
-          <h3 class="text-2xl mb-4">Job Aid</h3>
-          <p class="text-gray-600 mb-4">Quick guide: "How to Make a Bowl of Cereal" — A one-page reference for just-in-time learning.</p>
-          <a class="cartoon-button bg-green-600 text-white py-3 px-6 rounded-lg w-full" href="job-aid.html" target="_blank">
-            View Job Aid 📋
-          </a>
-        </div>
+      <div class="card">
+        <h3>Job Aid</h3>
+        <p>A concise, visual quick-reference for cereal prep, viewable online for just-in-time learning.</p>
+        <a href="job-aid.html" class="btn" style="background:var(--green)">View Job Aid 📋</a>
       </div>
     </div>
   </section>
 
   <!-- Resume -->
-  <section class="py-16 bg-gray-100">
-    <div class="container max-w-4xl text-center">
-      <div class="bg-white rounded-xl p-12 hover-lift">
-        <h2 class="text-3xl text-gray-800 mb-4">Want the full picture?</h2>
-        <p class="text-xl text-gray-600 mb-8">Download my resume for complete details on my background, experience, and achievements.</p>
-        <a class="cartoon-button bg-indigo-600 text-white py-4 px-8 rounded-lg text-lg" href="resume.pdf" download>
-          Download My Resume ⬇️
-        </a>
-      </div>
+  <section class="section">
+    <h2>Resume</h2>
+    <div class="line"></div>
+    <div class="card" style="text-align:center">
+      <p>Download my full resume to see experience, education, and achievements.</p>
+      <a href="resume.pdf" class="btn" download>⬇️ Download Resume</a>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-12 text-center">
-    <p>📧 peter.smyer@email.com | 📱 480-570-3459 | 💼 linkedin.com/in/petersmyer</p>
-    <p class="mt-4 text-gray-400">© 2024 Peter Smyer. All rights reserved.</p>
+  <footer>
+    <p>📧 peter.smyer@email.com | 📱 480-570-3459 | 
+      <a href="https://linkedin.com/in/petersmyer" target="_blank">LinkedIn</a>
+    </p>
+    <p style="margin-top:.5rem;font-size:13px">© 2025 Peter Smyer. Designed with passion for learning.</p>
   </footer>
 </body>
 </html>
