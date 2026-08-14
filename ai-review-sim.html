@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Fluency Trap — AI Output Review Simulator</title>
+<style>
+:root{
+  --ink:#12161c; --ink-2:#3d4652; --ink-3:#6b7683;
+  --paper:#fbfaf8; --card:#ffffff; --line:#e3e0da;
+  --accent:#1f5f4f; --accent-soft:#e8f0ed;
+  --warn:#8a5a1a; --warn-soft:#fbf1e2;
+  --bad:#8c2f2a; --bad-soft:#faeceb;
+  --good:#1f5f4f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  padding:0 0 64px;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);background:var(--card);padding:22px 0 18px;margin-bottom:26px}
+h1{font-size:21px;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--ink-3);font-size:14px;margin:0}
+.byline{font-size:12.5px;color:var(--ink-3);margin-top:10px}
+.byline a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+
+.progress{display:flex;gap:5px;margin:0 0 22px}
+.pip{height:4px;flex:1;background:var(--line);border-radius:2px;transition:background .25s}
+.pip.done{background:var(--accent)}
+.pip.now{background:var(--ink-2)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:16px}
+.eyebrow{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px;font-weight:600}
+h2{font-size:17px;margin:0 0 10px;letter-spacing:-.01em}
+p{margin:0 0 12px}
+.small{font-size:14px;color:var(--ink-2)}
+
+.brief{background:var(--accent-soft);border-left:3px solid var(--accent);padding:13px 15px;border-radius:0 7px 7px 0;margin:0 0 18px;font-size:14.5px}
+.brief strong{color:var(--accent)}
+
+.output{
+  background:#f6f5f2;border:1px solid var(--line);border-radius:8px;
+  padding:17px 19px;margin:0 0 18px;
+  font:14.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  white-space:pre-wrap;color:var(--ink)
+}
+.output-tag{
+  display:inline-block;font:600 10.5px/1 -apple-system,sans-serif;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);background:var(--card);
+  border:1px solid var(--line);border-radius:4px;padding:5px 8px;margin:0 0 9px
+}
+
+.choices{display:flex;flex-direction:column;gap:9px;margin:0 0 4px}
+button.opt{
+  text-align:left;font:15px/1.45 inherit;color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line);border-radius:8px;
+  padding:13px 15px;cursor:pointer;transition:border-color .15s,background .15s;width:100%
+}
+button.opt:hover{border-color:var(--ink-3);background:#fdfdfc}
+button.opt:disabled{cursor:default;opacity:.5}
+button.opt.chosen{border-color:var(--ink);background:#f7f6f4;opacity:1}
+button.opt b{display:block;font-size:15px;margin-bottom:2px}
+button.opt span{font-size:13.5px;color:var(--ink-3)}
+
+.fb{border-radius:8px;padding:17px 19px;margin:16px 0 0;font-size:14.8px;line-height:1.6}
+.fb.hit{background:var(--accent-soft);border-left:3px solid var(--good)}
+.fb.miss{background:var(--bad-soft);border-left:3px solid var(--bad)}
+.fb.part{background:var(--warn-soft);border-left:3px solid var(--warn)}
+.fb .verdict{font-weight:700;display:block;margin-bottom:7px;font-size:13px;letter-spacing:.05em;text-transform:uppercase}
+.fb.hit .verdict{color:var(--good)} .fb.miss .verdict{color:var(--bad)} .fb.part .verdict{color:var(--warn)}
+.fb p{margin:0 0 10px} .fb p:last-child{margin:0}
+
+.next{
+  background:var(--ink);color:#fff;border:0;border-radius:8px;
+  padding:12px 22px;font:600 15px inherit;cursor:pointer;margin-top:16px
+}
+.next:hover{background:var(--ink-2)}
+
+.dn{margin-top:14px;border-top:1px dashed var(--line);padding-top:13px}
+.dn summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600;list-style:none}
+.dn summary::-webkit-details-marker{display:none}
+.dn summary::before{content:"▸ ";}
+.dn[open] summary::before{content:"▾ ";}
+.dn .body{font-size:13.8px;color:var(--ink-2);margin-top:10px;line-height:1.6}
+.dn .body p{margin:0 0 9px}
+.dn cite{font-style:normal;color:var(--ink-3);font-size:13px}
+
+table.rubric{width:100%;border-collapse:collapse;margin:14px 0 4px;font-size:14.5px}
+table.rubric th{text-align:left;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);padding:0 10px 8px 0;font-weight:600;border-bottom:1px solid var(--line)}
+table.rubric td{padding:11px 10px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+table.rubric td.dim{font-weight:600;width:31%}
+table.rubric td.lvl{width:23%}
+.badge{display:inline-block;font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:20px}
+.b3{background:var(--accent-soft);color:var(--good)}
+.b2{background:var(--warn-soft);color:var(--warn)}
+.b1{background:var(--bad-soft);color:var(--bad)}
+table.rubric td.note{font-size:13.5px;color:var(--ink-3)}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--line);border-radius:8px;padding:11px 18px;font:600 14.5px inherit;cursor:pointer}
+.ghost:hover{border-color:var(--ink-3)}
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+.disc{font-size:12.5px;color:var(--ink-3);background:#f6f5f2;border:1px solid var(--line);border-radius:7px;padding:11px 13px;margin-top:16px}
+
+@media print{
+  body{background:#fff;padding:0}
+  .noprint{display:none!important}
+  .card{border:1px solid #ccc;break-inside:avoid}
+  header{margin-bottom:14px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>The Fluency Trap</h1>
+    <p class="sub">A simulation-based assessment: reviewing AI-drafted communications in a regulated lending context.</p>
+    <p class="byline">Designed and built by <strong>Peter Smyer Jr</strong> · Instructional design work sample ·
+      <a href="#notes">Why it is built this way</a></p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="progress noprint" id="prog"></div>
+  <div id="stage"></div>
+</div>
+
+<script>
+/* ---------- content ---------- */
+const CASES = [
+  {
+    id:1,
+    tag:"Adverse action notice · AI draft v1",
+    setup:"An applicant was declined. The assistant drafted the notice that goes in the mail.",
+    body:`Dear Ms. Alvarez,
+
+Thank you for your recent application with Meridian Lending. We appreciate the time you took to apply and the trust you placed in us.
+
+After a careful and thorough review of your application, we regret to inform you that we are unable to approve your request for credit at this time. This decision was not made lightly, and we understand it may be disappointing.
+
+We encourage you to reapply in the future should your circumstances change. Our team is always happy to answer any questions you may have.
+
+Warm regards,
+The Meridian Lending Team`,
+    flawed:true,
+    answers:[
+      {k:"send", label:"Send as-is", note:"It reads well, it's respectful, and nothing in it is untrue."},
+      {k:"tone", label:"Flag — the tone is too casual for a legal notice", note:"\"Warm regards\" on an adverse action notice."},
+      {k:"missing", label:"Flag — a legally required element is missing", note:"Something that has to be in this notice isn't."},
+      {k:"fact", label:"Flag — it contains a factual error", note:"A stated fact is wrong."}
+    ],
+    correct:"missing",
+    verdicts:{
+      send:["miss","You sent it.","This is the trap, and most reviewers walk into it. Nothing in that notice is false. It is warm, clear, well-organised, and grammatically flawless — and it is not legally sufficient.","Under ECOA and Regulation B, an adverse action notice must state the <strong>specific principal reason(s)</strong> for the denial, or tell the applicant how to request them. This draft gives a reason-shaped sentence — \"after a careful and thorough review\" — that contains no reason at all.","The failure mode you just experienced has a name in the research literature: fluency is mistaken for accuracy. The better the writing, the less carefully it gets read. That is precisely why AI-drafted compliance text is more dangerous than badly written compliance text, not less."],
+      tone:["part","Half right, and you flagged it — which matters.","Your instinct that something was off was correct, and flagging beats sending. But the tone is a cosmetic problem. The disqualifying problem is that the notice states no specific principal reason for the denial, which ECOA and Regulation B require.","Worth noticing what happened: the fluent, friendly surface pulled your attention to a surface issue. The substantive gap sat underneath it."],
+      missing:["hit","Correct — and correct for the right reason.","The notice never states a specific principal reason for the denial. ECOA and Regulation B require either the specific reason(s) or a disclosure of the applicant's right to request them within 30 days. \"After a careful and thorough review\" is reason-shaped language containing no reason.","You held your judgement against a piece of writing engineered to feel finished. That is the whole skill."],
+      fact:["part","You flagged it, which is the right reflex — but the diagnosis misses.","Every factual statement in the draft is accurate. The defect is an <em>omission</em>: no specific principal reason for the denial, as ECOA and Regulation B require.","Flagging on the wrong grounds still routes it to a human, so the harm is contained. But in a QA role the diagnosis is what makes the flag actionable."]
+    },
+    note:{
+      t:"Why the first case is one you are likely to fail",
+      b:"<p>Conventional design would explain the ECOA requirement, then test it. That produces high confidence and, per Muller's doctoral work on misconception-based instruction, close to zero conceptual gain — learners who already hold the wrong model hear the explanation as confirmation of what they thought.</p><p>So the sequence is inverted. The misconception here — <em>fluent writing is reviewed writing</em> — has to be <strong>activated and violated</strong> before any explanation lands. Getting this one wrong is the instructional event. Getting it right means you already held the model.</p>"
+    }
+  },
+  {
+    id:2,
+    tag:"Applicant email reply · AI draft v1",
+    setup:"An applicant emailed asking why she was declined and what happens next. The assistant drafted the reply.",
+    body:`Hi Ms. Alvarez,
+
+Happy to help. Under Section 615(b)(2) of the Equal Credit Opportunity Act, you have the right to request the specific reasons for our decision, and we must respond within 60 business days of your written request.
+
+You may also obtain a free copy of your credit report from each of the three bureaus once every 24 months.
+
+Let me know if you'd like me to start that process for you.
+
+Best,
+Meridian Lending Support`,
+    flawed:true,
+    answers:[
+      {k:"send", label:"Send as-is", note:"It cites the statute and gives the applicant a clear next step."},
+      {k:"cite", label:"Flag — the legal citations and timelines are wrong", note:"The specifics don't hold up."},
+      {k:"scope", label:"Flag — support shouldn't be answering this at all", note:"An escalation issue, not a content issue."},
+      {k:"tone", label:"Flag — too informal for a regulatory response", note:"\"Happy to help\" on a compliance matter."}
+    ],
+    correct:"cite",
+    verdicts:{
+      send:["miss","You sent it. Three separate errors went to the applicant.","Section 615(b)(2) is <strong>FCRA</strong>, not ECOA. The ECOA response window is <strong>30 days</strong>, not 60 business days. And free annual credit reports are available <strong>every 12 months</strong>, not every 24.","Notice the shape of this failure versus the first one. Case 1 was fluent and empty. This one is fluent and <em>specific</em> — section numbers, day counts, precise-sounding intervals. Specificity reads as verification. It isn't. A model that produces a plausible citation and a model that produces a correct one look identical on the page."],
+      cite:["hit","Correct. Three errors, and you caught the category.","Section 615(b)(2) belongs to FCRA, not ECOA. The ECOA response window is 30 days, not 60 business days. Free credit reports are available every 12 months, not every 24.","You resisted the second trap: precision is not accuracy. Invented specifics are more persuasive than vague ones, which is what makes them worse."],
+      scope:["part","Defensible as policy, wrong as diagnosis.","Whether support should field this is a routing question your organisation may well answer your way. But the disqualifying problem is on the page: wrong statute (FCRA §615(b)(2), not ECOA), wrong window (30 days, not 60 business days), wrong interval (12 months, not 24).","Escalating for the wrong reason still stops the email. The diagnosis is what stops the next one."],
+      tone:["part","You flagged it — good. The reason misses.","Tone is arguable. Three factual errors are not: wrong statute, wrong response window, wrong credit-report interval.","Same pattern as case 1 — the surface pulled focus from the substance."]
+    },
+    note:{
+      t:"Why case 2 escalates rather than repeats",
+      b:"<p>Case 1 taught that fluent can be empty. If case 2 simply repeated that shape, it would train pattern-matching rather than judgement.</p><p>So the failure mode inverts: this draft is fluent and <em>densely specific</em>. It defeats the heuristic a learner just built — \"look for vagueness\" — and forces the more expensive one: verify claims against a source regardless of how confident the text sounds.</p>"
+    }
+  },
+  {
+    id:3,
+    tag:"Adverse action notice · AI draft v2",
+    setup:"Same declined applicant. The assistant revised its first draft after feedback.",
+    body:`Dear Ms. Alvarez,
+
+Thank you for your application with Meridian Lending, received October 14, 2025.
+
+We are unable to approve your application. The principal reasons for this decision are:
+
+  • Length of credit history is insufficient
+  • Proportion of balances to credit limits is too high
+
+This decision was based in whole or in part on information obtained from a consumer reporting agency. You have the right to obtain a free copy of your report from that agency if you request it within 60 days.
+
+Notice: The federal Equal Credit Opportunity Act prohibits creditors from discriminating against credit applicants on the basis of race, color, religion, national origin, sex, marital status, age (provided the applicant has the capacity to contract), because all or part of the applicant's income derives from any public assistance program, or because the applicant has in good faith exercised any right under the Consumer Credit Protection Act.
+
+Meridian Lending · PO Box 4120 · Wilmington, DE 19899`,
+    flawed:false,
+    answers:[
+      {k:"send", label:"Send as-is", note:"It meets the requirements."},
+      {k:"reasons", label:"Flag — the stated reasons are still too vague", note:"\"Insufficient\" isn't specific enough."},
+      {k:"window", label:"Flag — the 60-day window is wrong", note:"Case 2 established 30 days."},
+      {k:"tone", label:"Flag — it's cold and will generate a complaint", note:"No acknowledgement of the applicant at all."}
+    ],
+    correct:"send",
+    verdicts:{
+      send:["hit","Correct. This one is clean — and choosing to send it was the harder call.","It states specific principal reasons, discloses the consumer-reporting-agency basis with the correct 60-day window for obtaining that report, and carries the ECOA notice. It is sufficient.","This case exists to measure something the first two cannot: <strong>restraint</strong>. After being burned twice, the cheap adaptation is to flag everything. That reviewer is as useless as the one who sends everything — they just fail in a direction that looks more responsible. Discrimination means being right in both directions."],
+      reasons:["miss","Over-flagged.","\"Length of credit history is insufficient\" and \"proportion of balances to credit limits is too high\" are standard specific principal reasons — they are close to the model language regulators expect. The notice is sufficient.","This is the failure this case was built to catch. Two burns in a row train a reviewer to flag reflexively, which feels like diligence and functions like noise. A queue where everything is escalated is a queue with no signal in it."],
+      window:["miss","Over-flagged — and the two windows got conflated.","There are two different clocks. The <strong>30-day</strong> window in case 2 is the creditor's deadline to provide reasons on request under ECOA. The <strong>60-day</strong> window here is the applicant's window to obtain a free report from the consumer reporting agency under FCRA. Both are correct in their own context.","Carrying a fact from one context into another is a specific and common failure. It looks like knowledge."],
+      tone:["miss","Over-flagged.","The notice is legally sufficient. Warmth is not a requirement, and — as case 1 demonstrated — warmth has historically been the packaging on the worst draft in this set.","Restraint is the skill being measured here. Flagging a compliant document is not a safe error; it is a different error."]
+    },
+    note:{
+      t:"Why one case in five is clean",
+      b:"<p>An assessment where every item is defective does not measure detection. It measures whether the learner noticed that every item is defective.</p><p>Placing the clean case third — immediately after two misses — turns the learner's freshly-built bias into the thing under test. The rubric scores <em>Restraint</em> as its own dimension for this reason: over-flagging is a real operational failure, not a cautious version of success.</p>"
+    }
+  },
+  {
+    id:4,
+    tag:"Pre-qualification landing page · AI draft v1",
+    setup:"Marketing asked the assistant for headline copy for a new campaign page.",
+    body:`Check Your Rate in 60 Seconds — Guaranteed Approval, No Credit Impact
+
+Meridian Lending makes borrowing simple. Our pre-qualification takes under a minute and won't affect your credit score. Every applicant who completes pre-qualification is guaranteed a personalised offer.
+
+Rates from 6.99% APR.
+
+Apply now — approval decisions in minutes.`,
+    flawed:true,
+    answers:[
+      {k:"send", label:"Send as-is", note:"Standard marketing language, and the soft-pull claim is accurate."},
+      {k:"udaap", label:"Flag — \"guaranteed approval\" is a deceptive claim", note:"It promises something that isn't being delivered."},
+      {k:"apr", label:"Flag — the APR figure needs a representative example", note:"A disclosure completeness issue."},
+      {k:"speed", label:"Flag — \"60 seconds\" and \"minutes\" are unrealistic", note:"An overpromise on timing."}
+    ],
+    correct:"udaap",
+    verdicts:{
+      send:["miss","You sent it. This is the one with regulatory teeth.","\"<strong>Guaranteed Approval</strong>\" in the headline is contradicted by the body copy, which guarantees only a personalised <em>offer</em>. A headline promising approval to every reader, walked back in smaller text below, is close to a textbook UDAAP deception exposure — a material claim likely to mislead a reasonable consumer.","The \"Rates from 6.99% APR\" line is a genuine secondary issue — a triggering term generally needs a representative example. But it is the smaller of the two, and picking it would mean picking the disclosure problem over the deception problem."],
+      udaap:["hit","Correct, and you picked the larger of two real problems.","\"Guaranteed Approval\" promises approval; the body promises only an offer. A material claim likely to mislead a reasonable consumer, contradicted in smaller text, is a UDAAP deception exposure.","\"Rates from 6.99% APR\" is also imperfect — a triggering term generally needs a representative example — but it is a disclosure gap, not a deception. Ranking two real findings correctly is what separates a reviewer from a checklist."],
+      apr:["part","A real finding, and the smaller one.","You are right that a bare \"from 6.99% APR\" generally needs a representative example. But the headline guarantees <strong>approval</strong> while the body guarantees only an <em>offer</em> — a material claim likely to mislead, contradicted in smaller text below. That is the UDAAP exposure and it outranks the disclosure gap.","Finding a real issue is not the same as finding the one that matters most. Reviewers are judged on the ranking."],
+      speed:["part","Flagged, but on the weakest available ground.","Speed claims are defensible if the process genuinely runs that fast. The disqualifying problem is \"Guaranteed Approval\" in the headline against \"guaranteed a personalised offer\" in the body — a material misleading claim.","There is also a secondary disclosure gap on the bare APR figure."]
+    },
+    note:{
+      t:"Why the last case has two right answers of unequal weight",
+      b:"<p>Earlier cases have one defect. This one has two real findings, ranked. Single-defect items measure detection; they cannot measure <em>prioritisation</em>, which is most of what senior review work actually is.</p><p>Feedback is written so the partially-correct path still confirms the finding was real before explaining why it ranks second. Credit for a genuine catch, and an accurate account of where it sits — Hattie and Timperley's distinction between feedback about the task and feedback about the self.</p>"
+    }
+  }
+];
+
+/* ---------- state ---------- */
+let idx = 0;
+const log = [];
+
+/* ---------- render ---------- */
+const stage = document.getElementById('stage');
+const prog  = document.getElementById('prog');
+
+function drawProgress(){
+  prog.innerHTML = CASES.map((_,i)=>
+    `<div class="pip ${i<idx?'done':i===idx?'now':''}"></div>`).join('') +
+    `<div class="pip ${idx>=CASES.length?'done':''}"></div>`;
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+
+function renderCase(){
+  const c = CASES[idx];
+  drawProgress();
+  stage.innerHTML = `
+    <div class="card">
+      <p class="eyebrow">Item ${c.id} of ${CASES.length}</p>
+      <div class="brief">
+        <strong>Your role:</strong> quality review at Meridian Lending. An AI assistant drafts
+        borrower communications; nothing reaches an applicant without your sign-off.
+        <br><strong>This item:</strong> ${c.setup}
+      </div>
+      <span class="output-tag">${c.tag}</span>
+      <div class="output">${esc(c.body)}</div>
+      <p class="small" style="font-weight:600;margin-bottom:11px">What do you do?</p>
+      <div class="choices" id="choices">
+        ${c.answers.map(a=>`<button class="opt" data-k="${a.k}"><b>${a.label}</b><span>${a.note}</span></button>`).join('')}
+      </div>
+      <div id="fbslot"></div>
+    </div>`;
+  document.querySelectorAll('#choices .opt').forEach(b=>{
+    b.addEventListener('click',()=>answer(b.dataset.k,b));
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function answer(k,btn){
+  const c = CASES[idx];
+  const v = c.verdicts[k];
+  document.querySelectorAll('#choices .opt').forEach(b=>{b.disabled=true});
+  btn.classList.add('chosen');
+
+  log.push({id:c.id, choice:k, grade:v[0], flagged:k!=='send', flawed:c.flawed, correct:k===c.correct});
+
+  document.getElementById('fbslot').innerHTML = `
+    <div class="fb ${v[0]}">
+      <span class="verdict">${v[1]}</span>
+      ${v.slice(2).map(p=>`<p>${p}</p>`).join('')}
+    </div>
+    <details class="dn">
+      <summary>Designer's note — ${c.note.t}</summary>
+      <div class="body">${c.note.b}</div>
+    </details>
+    <button class="next" id="nextBtn">${idx===CASES.length-1?'See your review profile':'Next item'}</button>`;
+  document.getElementById('nextBtn').addEventListener('click',()=>{
+    idx++;
+    idx>=CASES.length ? renderResult() : renderCase();
+  });
+  document.getElementById('fbslot').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ---------- rubric ---------- */
+function level(n){return n>=3?['b3','Proficient']:n>=2?['b2','Developing']:['b1','Emerging']}
+
+function renderResult(){
+  drawProgress();
+
+  // Detection: flagged the defective items (1,2,4)
+  const defective = log.filter(r=>r.flawed);
+  const detected  = defective.filter(r=>r.flagged).length;
+  // Diagnosis: named the right defect on defective items
+  const diagnosed = defective.filter(r=>r.correct).length;
+  // Restraint: did not flag the clean item (3)
+  const clean = log.filter(r=>!r.flawed);
+  const restrained = clean.filter(r=>!r.flagged).length;
+
+  const dScore = detected===3?3:detected===2?2:1;
+  const gScore = diagnosed>=3?3:diagnosed===2?2:1;
+  const rScore = restrained===1?3:1;
+
+  const [dc,dl]=level(dScore), [gc,gl]=level(gScore), [rc,rl]=level(rScore);
+
+  const dNote = detected===3?'Flagged every defective draft.':`Flagged ${detected} of 3 defective drafts. ${3-detected} would have reached an applicant.`;
+  const gNote = diagnosed>=3?'Named the disqualifying defect each time.':`Named the disqualifying defect on ${diagnosed} of 3. A flag with the wrong reason stops the document but not the pattern.`;
+  const rNote = restrained===1?'Passed the compliant notice without flagging it.':'Flagged a compliant notice. Over-flagging drains the review queue of signal — it is a different failure, not a safer one.';
+
+  const overall = (dScore+gScore+rScore);
+  let verdict;
+  if(overall>=8) verdict = "You held judgement against fluent text, diagnosed accurately, and did not over-correct after being burned. That combination is uncommon.";
+  else if(overall>=6) verdict = "Solid detection with a gap in either diagnosis or restraint. The next gain is in naming the defect precisely rather than sensing that one exists.";
+  else if(overall>=4) verdict = "The instrument caught what it was built to catch. Fluent text is being read as reviewed text — the single most consequential habit in AI-assisted compliance work.";
+  else verdict = "Every draft in this set was engineered to exploit the same reflex: the better something reads, the less it gets read. Worth running again now that the shape is visible.";
+
+  stage.innerHTML = `
+    <div class="card">
+      <p class="eyebrow">Review profile</p>
+      <h2>Your performance across four items</h2>
+      <p class="small">Scored against a mastery rubric rather than a point total. There is no pass mark, no badge, and no streak — those mechanics measure at or near zero effect on learning, and one of the design constraints here was to use only mechanics that don't.</p>
+      <table class="rubric">
+        <tr><th>Dimension</th><th>Level</th><th>What happened</th></tr>
+        <tr><td class="dim">Detection<br><span class="small" style="font-weight:400">Catching that something is wrong</span></td>
+            <td class="lvl"><span class="badge ${dc}">${dl}</span></td><td class="note">${dNote}</td></tr>
+        <tr><td class="dim">Diagnosis<br><span class="small" style="font-weight:400">Naming <em>what</em> is wrong</span></td>
+            <td class="lvl"><span class="badge ${gc}">${gl}</span></td><td class="note">${gNote}</td></tr>
+        <tr><td class="dim">Restraint<br><span class="small" style="font-weight:400">Not flagging what is fine</span></td>
+            <td class="lvl"><span class="badge ${rc}">${rl}</span></td><td class="note">${rNote}</td></tr>
+      </table>
+      <p style="margin-top:16px">${verdict}</p>
+      <div class="actions noprint">
+        <button class="next" onclick="window.print()">Print / save this profile</button>
+        <button class="ghost" onclick="location.reload()">Run it again</button>
+      </div>
+    </div>
+
+    <div class="card" id="notes">
+      <p class="eyebrow">Designer's notes</p>
+      <h2>How this was built, and why</h2>
+      <p>This is a work sample. The instructional decisions below were made against measured effect sizes rather than convention, and each one is falsifiable.</p>
+
+      <details class="dn" open><summary>Misconception-first sequencing</summary><div class="body">
+        <p>The first item is designed to be failed. Clear explanation followed by assessment produces high learner confidence and close to zero conceptual gain when a prior misconception is in play — the explanation gets absorbed as confirmation. The misconception here is <em>fluent writing is reviewed writing</em>, and it has to be activated and violated before instruction can land.</p>
+        <p><cite>Muller, doctoral research on misconception-based multimedia instruction.</cite></p>
+      </div></details>
+
+      <details class="dn"><summary>Simulation over knowledge check</summary><div class="body">
+        <p>The learner performs the actual task — read the draft, make the call — rather than answering questions about the task. Across a 609-study meta-analysis, simulation-based methods returned <strong>d = 1.20</strong> for knowledge and <strong>d = 0.82</strong> for behavioural transfer. Transfer is the outcome that matters here; a reviewer who can define UDAAP and still ships the draft has learned nothing operationally.</p>
+        <p><cite>Cook et al., meta-analysis of technology-enhanced simulation.</cite></p>
+      </div></details>
+
+      <details class="dn"><summary>Mastery rubric, not points or badges</summary><div class="body">
+        <p>No score, no streak, no badge. Digital badges measure at approximately <strong>d = 0.00</strong>; substantive feedback on the task measures <strong>d = 0.79</strong>. Gamification mechanics were audited individually and only those with a measurable learning effect were retained — mastery rubrics (0.55), narrative framing (0.42), progress visualisation (0.35). Everything else was cut, including the mechanics that make completion metrics look best.</p>
+        <p><cite>Hattie &amp; Timperley on feedback; gamification effect sizes from the same synthesis pass.</cite></p>
+      </div></details>
+
+      <details class="dn"><summary>Restraint scored as its own dimension</summary><div class="body">
+        <p>Item 3 is compliant. It sits immediately after two failures, when the learner's newly-acquired bias toward flagging is strongest. Assessments where every item is defective measure suspicion, not discrimination — and in live QA work, a reviewer who escalates everything degrades the queue as surely as one who escalates nothing.</p>
+      </div></details>
+
+      <details class="dn"><summary>Measurement without an LMS</summary><div class="body">
+        <p>The rubric maps to Kirkpatrick Level 2 and to LTEM Tier 5 (decision-making competence) rather than to completion. The print-to-artifact output exists so a result can be carried into a coaching conversation where no LMS is in play — the standard case in vendor and multi-site delivery.</p>
+        <p><cite>Kirkpatrick; Thalheimer, Learning-Transfer Evaluation Model.</cite></p>
+      </div></details>
+
+      <details class="dn"><summary>Build constraints</summary><div class="body">
+        <p>One HTML file. No frameworks, no build step, no external requests, no analytics, no storage. It runs offline, opens from a file path, and works on a phone. Vendor training sites do not reliably have the bandwidth, the browser, or the permissions that a hosted authoring tool assumes.</p>
+      </div></details>
+
+      <div class="disc">
+        <strong>Content note.</strong> Meridian Lending is fictional. Every draft, applicant and scenario in this
+        simulation was written for this work sample. No employer material, policy, template, system output or
+        customer data appears anywhere in it. Regulatory references — ECOA, Regulation B, FCRA, UDAAP — are to
+        publicly available federal consumer-protection law and are used illustratively; this is a training
+        artifact, not legal guidance.
+      </div>
+
+      <footer>
+        Peter Smyer Jr · Instructional design &amp; learning solutions ·
+        <a href="https://petersmyer.github.io/portfolio" style="color:var(--accent)">portfolio</a>
+      </footer>
+    </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+renderCase();
+</script>
+</body>
+</html>
